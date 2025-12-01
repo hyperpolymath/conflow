@@ -52,5 +52,6 @@ async fn main() -> Result<()> {
         Commands::Graph { pipeline, format } => {
             conflow::cli::graph::run(pipeline, format, cli.verbose).await
         }
+        Commands::Rsr { action } => conflow::cli::rsr::run(action, cli.verbose).await,
     }
 }

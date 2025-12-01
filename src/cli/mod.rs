@@ -6,6 +6,7 @@ pub mod analyze;
 pub mod cache;
 pub mod graph;
 pub mod init;
+pub mod rsr;
 pub mod run;
 pub mod validate;
 pub mod watch;
@@ -116,6 +117,55 @@ pub enum Commands {
         /// Output format
         #[clap(short, long, default_value = "text", value_parser = ["text", "dot", "mermaid"])]
         format: GraphFormat,
+    },
+
+    /// RSR (Rhodium Standard Repository) integration
+    Rsr {
+        #[clap(subcommand)]
+        action: RsrAction,
+    },
+}
+
+/// RSR integration actions
+#[derive(Subcommand, Debug, Clone)]
+pub enum RsrAction {
+    /// Check RSR compliance
+    Check {
+        /// Specific requirements to check (default: all)
+        #[clap(short, long)]
+        requirement: Vec<String>,
+
+        /// Output format
+        #[clap(short, long, default_value = "text", value_parser = ["text", "json"])]
+        format: OutputFormat,
+    },
+
+    /// Show RSR requirements
+    Requirements {
+        /// Filter by tag
+        #[clap(short, long)]
+        tag: Option<String>,
+
+        /// Show only specific requirement
+        #[clap(short, long)]
+        id: Option<String>,
+    },
+
+    /// List available RSR schemas
+    Schemas {
+        /// Filter by tag
+        #[clap(short, long)]
+        tag: Option<String>,
+    },
+
+    /// Export an RSR schema
+    Schema {
+        /// Schema ID to export
+        id: String,
+
+        /// Output file (default: stdout)
+        #[clap(short, long)]
+        output: Option<PathBuf>,
     },
 }
 

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Nickel executor
 //!
 //! Executes Nickel commands (export, typecheck, query, format).

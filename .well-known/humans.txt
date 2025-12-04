@@ -1,0 +1,23 @@
+/* TEAM */
+Lead Developer: Jonathan D.A. Jewell
+Contact: hyperpolymath [at] proton.me
+GitLab: @hyperpolymath
+Location: Global
+
+/* CONTRIBUTORS */
+See MAINTAINERS.md and git log for full contributor list.
+
+/* THANKS */
+The Rust Community
+CUE Lang Team
+Nickel Lang Team
+Rhodium Standard Repository Framework
+Campaign for Cooler Coding and Programming (CCCP)
+
+/* SITE */
+Last update: 2025-01-01
+Language: English
+Standards: RSR Silver Compliance
+Doctype: Rust CLI Application
+Components: Rust, CUE, Nickel, Nix
+IDE: Various (VS Code, Vim, Emacs, Helix)

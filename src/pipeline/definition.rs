@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Pipeline definition structures
 //!
 //! Defines the schema for .conflow.yaml files.

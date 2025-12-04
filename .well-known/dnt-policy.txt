@@ -1,0 +1,13 @@
+# Do Not Track Policy
+# See: https://www.eff.org/dnt-policy
+
+This is a command-line application that:
+- Does NOT collect any user data
+- Does NOT send telemetry
+- Does NOT track usage
+- Does NOT connect to external services (offline-first design)
+
+All operations are performed locally on your machine.
+
+Status: No tracking whatsoever
+Effective: 2025-01-01

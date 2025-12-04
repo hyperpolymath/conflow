@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Pattern recognition for configuration files
 //!
 //! Identifies common patterns in configuration files to aid in tool selection.

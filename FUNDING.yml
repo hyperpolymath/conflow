@@ -1,0 +1,31 @@
+# Funding information for conflow
+# See: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+
+# Primary funding platforms
+github: hyperpolymath
+open_collective: conflow
+
+# Alternative platforms
+# ko_fi: hyperpolymath
+# patreon: hyperpolymath
+# liberapay: hyperpolymath
+
+# Custom funding links
+custom:
+  - https://gitlab.com/hyperpolymath
+
+# Funding goals and transparency
+#
+# Current Goals:
+# - Infrastructure costs (CI/CD, hosting): $50/month
+# - Development time: Variable
+# - Security audits: As needed
+#
+# How funds are used:
+# - 100% goes to project development and maintenance
+# - All expenses are documented publicly
+# - No profit distribution (community project)
+#
+# Transparency:
+# - Financial reports published quarterly (when applicable)
+# - All sponsors acknowledged (with permission)

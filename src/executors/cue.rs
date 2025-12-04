@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! CUE executor
 //!
 //! Executes CUE commands (vet, export, eval, fmt, def).

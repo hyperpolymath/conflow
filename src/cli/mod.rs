@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! CLI command definitions and handlers
 //!
 //! Defines the command-line interface for conflow.

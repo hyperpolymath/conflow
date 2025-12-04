@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Progress spinner utilities
 //!
 //! Provides progress indicators for long-running operations.

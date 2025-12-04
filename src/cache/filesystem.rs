@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Filesystem-based cache implementation
 //!
 //! Stores cache entries as JSON files in a cache directory.

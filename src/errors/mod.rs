@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Error types with educational messages
 //!
 //! conflow provides helpful, educational error messages that guide users

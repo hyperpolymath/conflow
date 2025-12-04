@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Caching layer for pipeline results
 //!
 //! Provides file-based caching to avoid redundant stage executions.

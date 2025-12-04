@@ -1,0 +1,13 @@
+# Security Policy for conflow
+# See: https://securitytxt.org/
+
+Contact: mailto:security@conflow.dev
+Expires: 2026-01-01T00:00:00.000Z
+Encryption: https://gitlab.com/hyperpolymath/conflow/-/blob/main/.well-known/pgp-key.txt
+Preferred-Languages: en
+Canonical: https://gitlab.com/hyperpolymath/conflow/-/raw/main/.well-known/security.txt
+Policy: https://gitlab.com/hyperpolymath/conflow/-/blob/main/SECURITY.md
+
+# Acknowledgments
+# We thank all security researchers who responsibly disclose vulnerabilities.
+# Hall of Fame: https://gitlab.com/hyperpolymath/conflow/-/blob/main/SECURITY.md#acknowledgments

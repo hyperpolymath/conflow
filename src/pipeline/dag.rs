@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! DAG (Directed Acyclic Graph) builder for pipeline dependencies
 //!
 //! Builds and validates dependency graphs for pipeline stages,

@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Pipeline definitions and types
 //!
 //! This module defines the core data structures for conflow pipelines,

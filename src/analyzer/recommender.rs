@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Tool recommendation engine
 //!
 //! Recommends the appropriate tool (CUE or Nickel) based on complexity analysis.

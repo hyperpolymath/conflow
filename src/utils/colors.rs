@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: MIT OR Apache-2.0
+// Copyright (c) 2025 conflow contributors
+
 //! Terminal color utilities
 //!
 //! Provides consistent color schemes across the CLI.

@@ -1,0 +1,199 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# Copyright (c) 2025 conflow contributors
+#
+# GitLab CI/CD Configuration for conflow
+# RSR-Compliant Pipeline
+
+stages:
+  - check
+  - test
+  - build
+  - compliance
+  - release
+
+variables:
+  CARGO_HOME: ${CI_PROJECT_DIR}/.cargo
+  RUSTFLAGS: "-D warnings"
+
+# Cache cargo dependencies
+.cargo-cache: &cargo-cache
+  cache:
+    key: ${CI_JOB_NAME}
+    paths:
+      - .cargo/
+      - target/
+
+# -----------------------------------------------------------------------------
+# Check Stage
+# -----------------------------------------------------------------------------
+
+format:
+  stage: check
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - rustup component add rustfmt
+    - cargo fmt -- --check
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+lint:
+  stage: check
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - rustup component add clippy
+    - cargo clippy --all-targets --all-features -- -D warnings
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+audit:
+  stage: check
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - cargo install cargo-audit
+    - cargo audit
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+# -----------------------------------------------------------------------------
+# Test Stage
+# -----------------------------------------------------------------------------
+
+test:
+  stage: test
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - cargo test --all-features
+  coverage: '/^\d+.\d+% coverage/'
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+# -----------------------------------------------------------------------------
+# Build Stage
+# -----------------------------------------------------------------------------
+
+build:debug:
+  stage: build
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - cargo build --all-features
+  artifacts:
+    paths:
+      - target/debug/conflow
+    expire_in: 1 day
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+
+build:release:
+  stage: build
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - cargo build --release --all-features
+  artifacts:
+    paths:
+      - target/release/conflow
+    expire_in: 1 week
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+    - if: '$CI_COMMIT_TAG'
+
+# -----------------------------------------------------------------------------
+# Compliance Stage
+# -----------------------------------------------------------------------------
+
+rsr-compliance:
+  stage: compliance
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - cargo build --release
+    - ./target/release/conflow rsr check --format json > rsr-report.json || true
+    - cat rsr-report.json
+  artifacts:
+    paths:
+      - rsr-report.json
+    reports:
+      codequality: rsr-report.json
+  allow_failure: true
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+spdx-check:
+  stage: compliance
+  image: alpine:latest
+  script:
+    - |
+      echo "Checking SPDX headers..."
+      missing=0
+      for file in $(find src -name "*.rs"); do
+        if ! head -1 "$file" | grep -q "SPDX-License-Identifier"; then
+          echo "Missing SPDX header: $file"
+          missing=$((missing + 1))
+        fi
+      done
+      if [ $missing -gt 0 ]; then
+        echo "ERROR: $missing files missing SPDX headers"
+        exit 1
+      fi
+      echo "All source files have SPDX headers"
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+
+# -----------------------------------------------------------------------------
+# Release Stage
+# -----------------------------------------------------------------------------
+
+publish:crates:
+  stage: release
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - cargo publish --dry-run
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+  when: manual
+
+release:
+  stage: release
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  script:
+    - echo "Creating release for $CI_COMMIT_TAG"
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: "Release $CI_COMMIT_TAG"
+    assets:
+      links:
+        - name: "Linux Binary"
+          url: "${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_TAG}/raw/target/release/conflow?job=build:release"
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
+
+# -----------------------------------------------------------------------------
+# Documentation
+# -----------------------------------------------------------------------------
+
+pages:
+  stage: release
+  image: rust:latest
+  <<: *cargo-cache
+  script:
+    - cargo doc --no-deps --all-features
+    - mv target/doc public
+    - echo '<meta http-equiv="refresh" content="0; url=conflow/index.html">' > public/index.html
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'

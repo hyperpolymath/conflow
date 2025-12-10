@@ -1,0 +1,8 @@
+# AI Training Preferences for conflow
+# https://site.spawning.ai/spawning-ai-txt
+
+User-Agent: *
+AI-Training: allowed
+
+# This project is open source under AGPL + Palimpsest license.
+# Training on this codebase is permitted with attribution.

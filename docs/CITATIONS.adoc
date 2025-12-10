@@ -1,0 +1,36 @@
+= conflow - Citation Guide
+:toc:
+
+== BibTeX
+
+[source,bibtex]
+----
+@software{conflow_2025,
+  author = {Polymath, Hyper},
+  title = {conflow},
+  year = {2025},
+  url = {https://github.com/hyperpolymath/conflow},
+  license = {AGPL-3.0-or-later}
+}
+----
+
+== Harvard Style
+
+Polymath, H. (2025) _conflow_ [Computer software]. Available at: https://github.com/hyperpolymath/conflow
+
+== OSCOLA
+
+Hyper Polymath, 'conflow' (2025) <https://github.com/hyperpolymath/conflow>
+
+== MLA
+
+Polymath, Hyper. "conflow." 2025, github.com/hyperpolymath/conflow.
+
+== APA 7
+
+Polymath, H. (2025). _conflow_ [Computer software]. GitHub. https://github.com/hyperpolymath/conflow
+
+== See Also
+
+* link:../CITATION.cff[CITATION.cff]
+* link:../codemeta.json[codemeta.json]

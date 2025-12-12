@@ -116,7 +116,7 @@ impl BadgeGenerator {
         let status_x = label_width + status_width / 2;
 
         format!(
-            r##"<svg xmlns="http://www.w3.org/2000/svg" width="{total_width}" height="20" role="img" aria-label="{label}: {status}">
+            r##"<svg xmlns="https://www.w3.org/2000/svg" width="{total_width}" height="20" role="img" aria-label="{label}: {status}">
   <title>{label}: {status}</title>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0" stop-color="#bbb" stop-opacity=".1"/>
@@ -148,7 +148,7 @@ impl BadgeGenerator {
         let status_x = label_width + status_width / 2;
 
         format!(
-            r##"<svg xmlns="http://www.w3.org/2000/svg" width="{total_width}" height="20" role="img" aria-label="{label}: {status}">
+            r##"<svg xmlns="https://www.w3.org/2000/svg" width="{total_width}" height="20" role="img" aria-label="{label}: {status}">
   <title>{label}: {status}</title>
   <g shape-rendering="crispEdges">
     <rect width="{label_width}" height="20" fill="#555"/>
@@ -170,7 +170,7 @@ impl BadgeGenerator {
         let status_x = label_width + status_width / 2;
 
         format!(
-            r##"<svg xmlns="http://www.w3.org/2000/svg" width="{total_width}" height="18" role="img" aria-label="{label}: {status}">
+            r##"<svg xmlns="https://www.w3.org/2000/svg" width="{total_width}" height="18" role="img" aria-label="{label}: {status}">
   <title>{label}: {status}</title>
   <linearGradient id="s" x2="0" y2="100%">
     <stop offset="0"  stop-color="#fff" stop-opacity=".7"/>
@@ -207,7 +207,7 @@ impl BadgeGenerator {
         let status_text_width = status_width - 20;
 
         format!(
-            r##"<svg xmlns="http://www.w3.org/2000/svg" width="{total_width}" height="28" role="img" aria-label="{label}: {status}">
+            r##"<svg xmlns="https://www.w3.org/2000/svg" width="{total_width}" height="28" role="img" aria-label="{label}: {status}">
   <title>{label}: {status}</title>
   <g shape-rendering="crispEdges">
     <rect width="{label_width}" height="28" fill="#555"/>

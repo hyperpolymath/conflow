@@ -1,3 +1,5 @@
+;; SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+;; SPDX-FileCopyrightText: 2024-2025 hyperpolymath
 ;; conflow - Guix Package Definition
 ;; Run: guix shell -D -f guix.scm
 
@@ -16,10 +18,10 @@
                         #:recursive? #t
                         #:select? (git-predicate ".")))
     (build-system cargo-build-system)
-    (synopsis "Rust application")
-    (description "Rust application - part of the RSR ecosystem.")
-    (home-page "https://github.com/hyperpolymath/conflow")
-    (license license:agpl3+)))
+    (synopsis "Configuration Flow Orchestrator")
+    (description "Intelligently orchestrate CUE, Nickel, and configuration validation workflows.")
+    (home-page "https://gitlab.com/hyperpolymath/conflow")
+    (license (list license:expat license:agpl3+))))
 
 ;; Return package for guix shell
 conflow

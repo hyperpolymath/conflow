@@ -1,8 +1,8 @@
-;; SPDX-License-Identifier: AGPL-3.0-or-later
-;; SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
+;; SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+;; SPDX-FileCopyrightText: 2024-2025 hyperpolymath
 ;; ECOSYSTEM.scm - Project Ecosystem Relationships
 ;; conflow
-;; Reference: https://github.com/hyperpolymath/ECOSYSTEM.scm
+;; Reference: https://gitlab.com/hyperpolymath/ECOSYSTEM.scm
 
 (ecosystem
   (version "1.0.0")

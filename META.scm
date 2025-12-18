@@ -1,9 +1,9 @@
-;; SPDX-License-Identifier: AGPL-3.0-or-later
-;; SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
+;; SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+;; SPDX-FileCopyrightText: 2024-2025 hyperpolymath
 
 ;;; META.scm — Architecture Decisions and Development Practices
 ;;; conflow
-;;; Reference: https://github.com/hyperpolymath/META.scm
+;;; Reference: https://gitlab.com/hyperpolymath/META.scm
 
 (define-module (conflow meta)
   #:export (architecture-decisions
@@ -47,7 +47,7 @@
      (dependency-scanning . "Dependabot + OSSF Scorecard")
      (credentials . "Environment variables only, never committed")
      (input-validation . "Whitelist + schema validation at boundaries")
-     (license-compliance . "AGPL-3.0-or-later"))
+     (license-compliance . "MIT OR AGPL-3.0-or-later"))
 
     (testing
      (framework . "language-native")

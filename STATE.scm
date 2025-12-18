@@ -4,8 +4,8 @@
 ;;; Purpose: Preserve AI conversation context across sessions
 ;;; Reference: https://github.com/hyperpolymath/state.scm
 
-;; SPDX-License-Identifier: AGPL-3.0-or-later
-;; SPDX-FileCopyrightText: 2025 Jonathan D.A. Jewell
+;; SPDX-License-Identifier: MIT OR AGPL-3.0-or-later
+;; SPDX-FileCopyrightText: 2024-2025 hyperpolymath
 
 ;;;============================================================================
 ;;; METADATA
@@ -15,9 +15,9 @@
   '((version . "0.1.0")
     (schema-version . "1.0")
     (created . "2025-12-15")
-    (updated . "2025-12-15")
+    (updated . "2025-12-17")
     (project . "conflow")
-    (repo . "github.com/hyperpolymath/conflow")))
+    (repo . "gitlab.com/hyperpolymath/conflow")))
 
 ;;;============================================================================
 ;;; PROJECT CONTEXT
@@ -27,7 +27,7 @@
   '((name . "conflow")
     (tagline . "Intelligently orchestrate CUE, Nickel, and configuration validation workflows.")
     (version . "0.1.0")
-    (license . "AGPL-3.0-or-later")
+    (license . "MIT OR AGPL-3.0-or-later")
     (rsr-compliance . "gold-target")
 
     (tech-stack

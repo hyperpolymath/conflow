@@ -40,19 +40,24 @@
 ;;;============================================================================
 
 (define current-position
-  '((phase . "v0.1 - Initial Setup and RSR Compliance")
-    (overall-completion . 25)
+  '((phase . "v0.1.1 - Security Hardening Complete")
+    (overall-completion . 30)
 
     (components
      ((rsr-compliance
        ((status . "complete")
         (completion . 100)
-        (notes . "SHA-pinned actions, SPDX headers, multi-platform CI")))
+        (notes . "SHA-pinned actions, SPDX headers, permissions, multi-platform CI")))
+
+      (security
+       ((status . "complete")
+        (completion . 100)
+        (notes . "All workflows SHA-pinned, HTTP check fixed, license standardized")))
 
       (documentation
        ((status . "foundation")
-        (completion . 30)
-        (notes . "README exists, META/ECOSYSTEM/STATE.scm added")))
+        (completion . 35)
+        (notes . "README, META/ECOSYSTEM/STATE.scm, updated roadmap")))
 
       (testing
        ((status . "minimal")
@@ -62,13 +67,16 @@
       (core-functionality
        ((status . "in-progress")
         (completion . 25)
-        (notes . "Initial implementation underway")))))
+        (notes . "Pipeline parsing and execution framework started")))))
 
     (working-features
      ("RSR-compliant CI/CD pipeline"
       "Multi-platform mirroring (GitHub, GitLab, Bitbucket)"
       "SPDX license headers on all files"
-      "SHA-pinned GitHub Actions"))))
+      "SHA-pinned GitHub Actions (14 workflows)"
+      "Security policy enforcement (HTTP blocking, secrets detection)"
+      "OSSF Scorecard integration"
+      "CodeQL security analysis"))))
 
 ;;;============================================================================
 ;;; ROUTE TO MVP
@@ -79,30 +87,73 @@
     (definition . "Stable release with comprehensive documentation and tests")
 
     (milestones
-     ((v0.2
-       ((name . "Core Functionality")
+     ((v0.1.1
+       ((name . "Security Hardening Complete")
+        (status . "complete")
+        (items
+         ("SHA-pinned all GitHub Actions"
+          "SPDX headers on all workflow files"
+          "Fixed HTTP URL detection in security-policy.yml"
+          "Standardized dual license (MIT OR AGPL-3.0-or-later)"
+          "Added permissions declarations to all workflows"
+          "Fixed repository URL consistency"))))
+
+      (v0.2
+       ((name . "Core Pipeline Execution")
+        (status . "in-progress")
+        (items
+         ("Pipeline definition parsing (.conflow.yaml)"
+          "DAG-based stage dependency resolution"
+          "CUE executor implementation"
+          "Nickel executor implementation"
+          "Shell executor implementation"
+          "Basic error handling with miette"))))
+
+      (v0.3
+       ((name . "Caching & Watch Mode")
         (status . "pending")
         (items
-         ("Implement primary features"
-          "Add comprehensive tests"
-          "Improve documentation"))))
+         ("BLAKE3-based content hashing"
+          "Filesystem cache implementation"
+          "File watching with notify crate"
+          "Incremental re-execution"))))
+
+      (v0.4
+       ((name . "Analysis & Recommendations")
+        (status . "pending")
+        (items
+         ("Config format detection"
+          "Complexity metrics"
+          "Tool recommendations engine"
+          "Migration path suggestions"))))
 
       (v0.5
-       ((name . "Feature Complete")
+       ((name . "RSR Integration")
+        (status . "pending")
+        (items
+         ("Compliance checking"
+          "Badge generation"
+          "Remediation suggestions"
+          "Template generation"))))
+
+      (v0.8
+       ((name . "Feature Complete Beta")
         (status . "pending")
         (items
          ("All planned features implemented"
           "Test coverage > 70%"
-          "API stability"))))
+          "API stability"
+          "Performance profiling"))))
 
       (v1.0
        ((name . "Production Release")
         (status . "pending")
         (items
-         ("Comprehensive test coverage"
+         ("Comprehensive test coverage (>80%)"
           "Performance optimization"
-          "Security audit"
-          "User documentation complete"))))))))
+          "Security audit completion"
+          "User documentation complete"
+          "Example pipelines library"))))))))
 
 ;;;============================================================================
 ;;; BLOCKERS & ISSUES
@@ -151,6 +202,16 @@
 
 (define session-history
   '((snapshots
+     ((date . "2025-12-18")
+      (session . "security-hardening-review")
+      (accomplishments
+       ("SHA-pinned all 14 GitHub workflow files"
+        "Fixed critical bug in security-policy.yml (http vs https check)"
+        "Standardized license to MIT OR AGPL-3.0-or-later across all files"
+        "Added SPDX headers and permissions to all workflows"
+        "Fixed repository URL inconsistencies"
+        "Updated roadmap with detailed milestones"))
+      (notes . "Comprehensive security review and consistency fixes"))
      ((date . "2025-12-15")
       (session . "initial-state-creation")
       (accomplishments
@@ -184,11 +245,11 @@
 
 (define state-summary
   '((project . "conflow")
-    (version . "0.1.0")
-    (overall-completion . 25)
-    (next-milestone . "v0.2 - Core Functionality")
+    (version . "0.1.1")
+    (overall-completion . 30)
+    (next-milestone . "v0.2 - Core Pipeline Execution")
     (critical-blockers . 0)
     (high-priority-issues . 0)
-    (updated . "2025-12-15")))
+    (updated . "2025-12-18")))
 
 ;;; End of STATE.scm

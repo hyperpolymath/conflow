@@ -232,7 +232,7 @@ This project follows link:https://gitlab.com/hyperpolymath/rhodium-standard-repo
 
 This project is dual-licensed under:
 
-* MIT License
+* Palimpsest-MPL-1.0 License
 * Apache License, Version 2.0
 
 See link:LICENSE.txt[LICENSE.txt] for details.

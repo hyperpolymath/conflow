@@ -3,31 +3,16 @@
 
 //! # conflow - Configuration Flow Orchestrator
 //!
-//! `conflow` intelligently orchestrates CUE, Nickel, and configuration validation workflows.
+//! `conflow` is a high-assurance orchestration tool designed to manage the 
+//! lifecycle of complex configuration ecosystems. It intelligently chooses 
+//! between CUE (for validation-heavy data) and Nickel (for logic-heavy 
+//! configuration) based on the problem domain.
 //!
-//! ## Features
-//!
-//! - **Intelligent analysis** - Recommends CUE vs Nickel based on complexity
-//! - **Pipeline orchestration** - Chain tools with dependency management
-//! - **Smart caching** - Only re-run what changed
-//! - **Educational** - Learn why certain tools fit certain problems
-//! - **RSR Integration** - Full integration with Rhodium Standard Repository
-//!
-//! ## Quick Start
-//!
-//! ```bash
-//! # Initialize a new project
-//! conflow init my-project
-//!
-//! # Analyze existing configs
-//! conflow analyze config.yaml
-//!
-//! # Run pipeline
-//! conflow run
-//!
-//! # Check RSR compliance
-//! conflow rsr check
-//! ```
+//! CORE ARCHITECTURE:
+//! 1. **Analyzer**: Heuristic engine that recommends tools based on config complexity.
+//! 2. **Pipeline**: Dependency-aware execution engine for chaining config tools.
+//! 3. **Cache**: Content-addressable storage to skip redundant evaluations.
+//! 4. **RSR**: Implementation of the Rhodium Standard Repository compliance checks.
 
 pub mod analyzer;
 pub mod cache;
@@ -38,12 +23,12 @@ pub mod pipeline;
 pub mod rsr;
 pub mod utils;
 
-// Re-export commonly used types
+// CONVENIENCE: Re-export the primary error and result types.
 pub use errors::{ConflowError, ConflowResult};
 pub use pipeline::{Pipeline, Stage};
 
-// Re-export RSR types
+// RSR COMPLIANCE: Interfaces for verified repository state.
 pub use rsr::{ComplianceChecker, ComplianceLevel, ComplianceReport, RsrHooks};
 
-/// Library version
+/// The semantic version of the conflow crate.
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");

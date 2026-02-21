@@ -248,3 +248,8 @@ Contributions are welcome! Please read our link:CONTRIBUTING.md[Contributing Gui
 * *CUE:* https://cuelang.org
 * *Nickel:* https://nickel-lang.org
 * *RSR:* https://gitlab.com/hyperpolymath/rhodium-standard-repositories
+
+
+== Architecture
+
+See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.

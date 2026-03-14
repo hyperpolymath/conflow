@@ -6,29 +6,29 @@
 [source,bibtex]
 ----
 @software{conflow_2025,
-  author = {Polymath, Hyper},
+  author = {Jewell, Jonathan D.A.},
   title = {conflow},
   year = {2025},
   url = {https://github.com/hyperpolymath/conflow},
-  license = {AGPL-3.0-or-later}
+  license = {PMPL-1.0-or-later}
 }
 ----
 
 == Harvard Style
 
-Polymath, H. (2025) _conflow_ [Computer software]. Available at: https://github.com/hyperpolymath/conflow
+Jewell, J.D.A. (2025) _conflow_ [Computer software]. Available at: https://github.com/hyperpolymath/conflow
 
 == OSCOLA
 
-Hyper Polymath, 'conflow' (2025) <https://github.com/hyperpolymath/conflow>
+Jonathan D.A. Jewell, 'conflow' (2025) <https://github.com/hyperpolymath/conflow>
 
 == MLA
 
-Polymath, Hyper. "conflow." 2025, github.com/hyperpolymath/conflow.
+Jewell, Jonathan D.A.. "conflow." 2025, github.com/hyperpolymath/conflow.
 
 == APA 7
 
-Polymath, H. (2025). _conflow_ [Computer software]. GitHub. https://github.com/hyperpolymath/conflow
+Jewell, J.D.A. (2025). _conflow_ [Computer software]. GitHub. https://github.com/hyperpolymath/conflow
 
 == See Also
 

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: PMPL-1.0-or-later
 //! RSR command - RSR integration and compliance checking
 
 use colored::Colorize;

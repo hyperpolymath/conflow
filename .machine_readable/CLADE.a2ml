@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "20b927fb-6fea-5215-9c57-ac4b5102dfe0"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "conflow"
+prefixed-name = "ax-conflow"
+
+[clade]
+primary = "ax"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/conflow"
+gitlab = "hyperpolymath/conflow"
+bitbucket = "hyperpolymath/conflow"
+
+[lineage]
+type = "standalone"
+parent = "Conversational flow engine"
+born = "2026-03-16"

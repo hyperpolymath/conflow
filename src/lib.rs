@@ -14,6 +14,7 @@
 //! 3. **Cache**: Content-addressable storage to skip redundant evaluations.
 //! 4. **RSR**: Implementation of the Rhodium Standard Repository compliance checks.
 
+#![forbid(unsafe_code)]
 pub mod analyzer;
 pub mod cache;
 pub mod cli;

@@ -121,7 +121,9 @@ pub fn resolve_globs(patterns: &[&str], base_dir: &Path) -> Result<Vec<PathBuf>,
         };
 
         let matches: Vec<_> = glob::glob(&full_pattern)
-            .map_err(|e| ConflowError::GlobPattern { message: e.to_string() })?
+            .map_err(|e| ConflowError::GlobPattern {
+                message: e.to_string(),
+            })?
             .filter_map(Result::ok)
             .collect();
 

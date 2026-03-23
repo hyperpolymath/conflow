@@ -162,10 +162,13 @@ impl RsrSchemaRegistry {
 
     /// Get schema content
     pub fn get_content(&self, id: &str) -> Result<String, ConflowError> {
-        let schema = self.schemas.get(id).ok_or_else(|| ConflowError::FileNotFound {
-            path: PathBuf::from(id),
-            help: Some("Schema not found in registry".into()),
-        })?;
+        let schema = self
+            .schemas
+            .get(id)
+            .ok_or_else(|| ConflowError::FileNotFound {
+                path: PathBuf::from(id),
+                help: Some("Schema not found in registry".into()),
+            })?;
 
         match &schema.source {
             SchemaSource::Inline { content } => Ok(content.clone()),

@@ -114,20 +114,20 @@ impl NickelExecutor {
 
         // Create parent directories if needed
         if let Some(parent) = output_path.parent() {
-            tokio::fs::create_dir_all(parent).await.map_err(|e| {
-                ConflowError::FileWriteError {
+            tokio::fs::create_dir_all(parent)
+                .await
+                .map_err(|e| ConflowError::FileWriteError {
                     path: parent.to_path_buf(),
                     error: e.to_string(),
-                }
-            })?;
+                })?;
         }
 
-        tokio::fs::write(&output_path, stdout).await.map_err(|e| {
-            ConflowError::FileWriteError {
+        tokio::fs::write(&output_path, stdout)
+            .await
+            .map_err(|e| ConflowError::FileWriteError {
                 path: output_path.clone(),
                 error: e.to_string(),
-            }
-        })?;
+            })?;
 
         Ok(vec![output_path])
     }
@@ -150,11 +150,14 @@ impl Executor for NickelExecutor {
         cmd.envs(env);
 
         // Execute
-        let output = cmd.output().await.map_err(|e| ConflowError::ToolExecutionFailed {
-            tool: "nickel".to_string(),
-            error: e.to_string(),
-            help: Some("Ensure Nickel is installed and accessible".into()),
-        })?;
+        let output = cmd
+            .output()
+            .await
+            .map_err(|e| ConflowError::ToolExecutionFailed {
+                tool: "nickel".to_string(),
+                error: e.to_string(),
+                help: Some("Ensure Nickel is installed and accessible".into()),
+            })?;
 
         let duration = start.elapsed();
         let stdout = String::from_utf8_lossy(&output.stdout).to_string();

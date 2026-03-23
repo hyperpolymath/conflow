@@ -23,11 +23,7 @@ pub struct EducationalMessage {
 
 impl EducationalMessage {
     /// Create a message for CUE constraint violation
-    pub fn cue_constraint_violation(
-        field: &str,
-        expected: &str,
-        got: &str,
-    ) -> Self {
+    pub fn cue_constraint_violation(field: &str, expected: &str, got: &str) -> Self {
         Self {
             summary: format!("Constraint violation on field '{}'", field),
             explanation: format!(
@@ -91,7 +87,11 @@ impl EducationalMessage {
                  This tool is used for configuration {} and must be installed\n\
                  before running pipelines that use it.",
                 tool,
-                if tool == "cue" { "validation" } else { "generation" }
+                if tool == "cue" {
+                    "validation"
+                } else {
+                    "generation"
+                }
             ),
             example: if !install_cmd.is_empty() {
                 Some(format!("# Install {}:\n{}", tool, install_cmd))

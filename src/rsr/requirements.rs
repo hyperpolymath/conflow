@@ -240,8 +240,8 @@ pub fn builtin_config_requirements() -> Vec<RsrRequirement> {
             id: "RSR-CONFIG-003".into(),
             name: "Multi-environment configuration".into(),
             class: RsrRequirementClass::Preferential,
-            description:
-                "Environment-specific configurations should be generated, not duplicated".into(),
+            description: "Environment-specific configurations should be generated, not duplicated"
+                .into(),
             validation: ValidationChecks {
                 file_exists: vec![],
                 file_absent: vec![],
@@ -354,7 +354,8 @@ impl RsrRequirementRegistry {
 
     /// Register a custom requirement
     pub fn register(&mut self, requirement: RsrRequirement) {
-        self.requirements.insert(requirement.id.clone(), requirement);
+        self.requirements
+            .insert(requirement.id.clone(), requirement);
     }
 
     /// Load requirements from a YAML file

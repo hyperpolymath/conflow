@@ -54,11 +54,14 @@ impl Executor for ShellExecutor {
         cmd.current_dir(working_dir);
         cmd.envs(env);
 
-        let output = cmd.output().await.map_err(|e| ConflowError::ToolExecutionFailed {
-            tool: "shell".to_string(),
-            error: e.to_string(),
-            help: Some(format!("Shell '{}' may not be available", shell)),
-        })?;
+        let output = cmd
+            .output()
+            .await
+            .map_err(|e| ConflowError::ToolExecutionFailed {
+                tool: "shell".to_string(),
+                error: e.to_string(),
+                help: Some(format!("Shell '{}' may not be available", shell)),
+            })?;
 
         let duration = start.elapsed();
         let stdout = String::from_utf8_lossy(&output.stdout).to_string();

@@ -46,9 +46,8 @@ pub async fn run(name: Option<String>, template: Option<String>, verbose: bool) 
     };
 
     // Write pipeline file
-    std::fs::write(".conflow.yaml", &pipeline_content).map_err(|e| {
-        miette::miette!("Failed to write .conflow.yaml: {}", e)
-    })?;
+    std::fs::write(".conflow.yaml", &pipeline_content)
+        .map_err(|e| miette::miette!("Failed to write .conflow.yaml: {}", e))?;
 
     println!("  {} Created .conflow.yaml", "✓".green());
 
@@ -56,9 +55,8 @@ pub async fn run(name: Option<String>, template: Option<String>, verbose: bool) 
     let dirs = [".conflow", "schemas", "configs"];
     for dir in dirs {
         if !Path::new(dir).exists() {
-            std::fs::create_dir_all(dir).map_err(|e| {
-                miette::miette!("Failed to create directory '{}': {}", dir, e)
-            })?;
+            std::fs::create_dir_all(dir)
+                .map_err(|e| miette::miette!("Failed to create directory '{}': {}", dir, e))?;
             println!("  {} Created {}/", "✓".green(), dir);
         }
     }
@@ -72,7 +70,10 @@ pub async fn run(name: Option<String>, template: Option<String>, verbose: bool) 
     println!("{}", "Project initialized!".green().bold());
     println!();
     println!("Next steps:");
-    println!("  1. Edit {} to define your pipeline", ".conflow.yaml".cyan());
+    println!(
+        "  1. Edit {} to define your pipeline",
+        ".conflow.yaml".cyan()
+    );
     println!("  2. Add your configuration files to {}", "configs/".cyan());
     println!("  3. Run {} to execute the pipeline", "conflow run".cyan());
     println!();

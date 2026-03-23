@@ -24,8 +24,7 @@ pub struct CueExecutor {
 impl CueExecutor {
     /// Create a new CUE executor
     pub fn new() -> Result<Self, ConflowError> {
-        let cue_bin =
-            which::which("cue").map_err(|_| ConflowError::tool_not_found("cue"))?;
+        let cue_bin = which::which("cue").map_err(|_| ConflowError::tool_not_found("cue"))?;
 
         Ok(Self { cue_bin })
     }
@@ -116,20 +115,20 @@ impl CueExecutor {
 
         // Create parent directories if needed
         if let Some(parent) = output_path.parent() {
-            tokio::fs::create_dir_all(parent).await.map_err(|e| {
-                ConflowError::FileWriteError {
+            tokio::fs::create_dir_all(parent)
+                .await
+                .map_err(|e| ConflowError::FileWriteError {
                     path: parent.to_path_buf(),
                     error: e.to_string(),
-                }
-            })?;
+                })?;
         }
 
-        tokio::fs::write(&output_path, stdout).await.map_err(|e| {
-            ConflowError::FileWriteError {
+        tokio::fs::write(&output_path, stdout)
+            .await
+            .map_err(|e| ConflowError::FileWriteError {
                 path: output_path.clone(),
                 error: e.to_string(),
-            }
-        })?;
+            })?;
 
         Ok(vec![output_path])
     }
@@ -152,11 +151,14 @@ impl Executor for CueExecutor {
         cmd.envs(env);
 
         // Execute
-        let output = cmd.output().await.map_err(|e| ConflowError::ToolExecutionFailed {
-            tool: "cue".to_string(),
-            error: e.to_string(),
-            help: Some("Ensure CUE is installed and accessible".into()),
-        })?;
+        let output = cmd
+            .output()
+            .await
+            .map_err(|e| ConflowError::ToolExecutionFailed {
+                tool: "cue".to_string(),
+                error: e.to_string(),
+                help: Some("Ensure CUE is installed and accessible".into()),
+            })?;
 
         let duration = start.elapsed();
         let stdout = String::from_utf8_lossy(&output.stdout).to_string();

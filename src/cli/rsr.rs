@@ -13,26 +13,17 @@ use crate::rsr::schemas::RsrSchemaRegistry;
 /// Run the RSR command
 pub async fn run(action: RsrAction, verbose: bool) -> Result<()> {
     match action {
-        RsrAction::Check { requirement, format } => {
-            run_check(requirement, format, verbose).await
-        }
-        RsrAction::Requirements { tag, id } => {
-            run_requirements(tag, id, verbose).await
-        }
-        RsrAction::Schemas { tag } => {
-            run_schemas(tag, verbose).await
-        }
-        RsrAction::Schema { id, output } => {
-            run_schema(id, output, verbose).await
-        }
+        RsrAction::Check {
+            requirement,
+            format,
+        } => run_check(requirement, format, verbose).await,
+        RsrAction::Requirements { tag, id } => run_requirements(tag, id, verbose).await,
+        RsrAction::Schemas { tag } => run_schemas(tag, verbose).await,
+        RsrAction::Schema { id, output } => run_schema(id, output, verbose).await,
     }
 }
 
-async fn run_check(
-    requirements: Vec<String>,
-    format: OutputFormat,
-    verbose: bool,
-) -> Result<()> {
+async fn run_check(requirements: Vec<String>, format: OutputFormat, verbose: bool) -> Result<()> {
     let checker = ComplianceChecker::new();
     let working_dir = std::env::current_dir()
         .map_err(|e| miette::miette!("Failed to get current directory: {}", e))?;
@@ -67,10 +58,7 @@ async fn run_check(
     Ok(())
 }
 
-fn print_compliance_report(
-    report: &crate::rsr::compliance::ComplianceReport,
-    verbose: bool,
-) {
+fn print_compliance_report(report: &crate::rsr::compliance::ComplianceReport, verbose: bool) {
     println!();
     println!("{}", "RSR Compliance Report".bold());
     println!("{}", "═".repeat(50));
@@ -151,9 +139,7 @@ fn print_compliance_report(
     println!();
 }
 
-fn print_compliance_json(
-    report: &crate::rsr::compliance::ComplianceReport,
-) -> Result<()> {
+fn print_compliance_json(report: &crate::rsr::compliance::ComplianceReport) -> Result<()> {
     let json = serde_json::json!({
         "level": format!("{:?}", report.level),
         "score": report.score,
@@ -192,10 +178,7 @@ fn print_compliance_json(
     Ok(())
 }
 
-fn print_requirement_results(
-    results: &[crate::rsr::compliance::RequirementResult],
-    verbose: bool,
-) {
+fn print_requirement_results(results: &[crate::rsr::compliance::RequirementResult], verbose: bool) {
     println!();
     println!("{}", "Requirement Check Results".bold());
     println!("{}", "═".repeat(50));
@@ -270,11 +253,7 @@ fn print_requirement_results_json(
     Ok(())
 }
 
-async fn run_requirements(
-    tag: Option<String>,
-    id: Option<String>,
-    _verbose: bool,
-) -> Result<()> {
+async fn run_requirements(tag: Option<String>, id: Option<String>, _verbose: bool) -> Result<()> {
     let registry = RsrRequirementRegistry::new();
 
     println!();
@@ -407,11 +386,7 @@ async fn run_schemas(tag: Option<String>, _verbose: bool) -> Result<()> {
     Ok(())
 }
 
-async fn run_schema(
-    id: String,
-    output: Option<PathBuf>,
-    _verbose: bool,
-) -> Result<()> {
+async fn run_schema(id: String, output: Option<PathBuf>, _verbose: bool) -> Result<()> {
     let registry = RsrSchemaRegistry::new();
 
     let content = registry.get_content(&id)?;

@@ -12,9 +12,8 @@ use crate::cache::{Cache, FilesystemCache};
 
 /// Run the cache command
 pub async fn run(action: CacheAction, _verbose: bool) -> Result<()> {
-    let working_dir = std::env::current_dir().map_err(|e| {
-        miette::miette!("Failed to get current directory: {}", e)
-    })?;
+    let working_dir = std::env::current_dir()
+        .map_err(|e| miette::miette!("Failed to get current directory: {}", e))?;
 
     let cache_dir = working_dir.join(".conflow").join("cache");
     let cache = FilesystemCache::new(cache_dir.clone(), working_dir)?;

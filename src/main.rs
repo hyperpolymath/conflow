@@ -3,8 +3,8 @@
 
 //! conflow - Configuration Flow Orchestrator (CLI)
 //!
-//! This is the primary binary entry point for the `conflow` tool. It handles 
-//! environment setup, command-line parsing via `clap`, and dispatches 
+//! This is the primary binary entry point for the `conflow` tool. It handles
+//! environment setup, command-line parsing via `clap`, and dispatches
 //! execution to specialized module runners.
 
 use clap::Parser;

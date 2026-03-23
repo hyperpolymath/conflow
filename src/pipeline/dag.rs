@@ -231,7 +231,12 @@ impl DagBuilder {
             let stage = &pipeline.stages[*idx];
             let deps = self.dependencies(&stage.name).unwrap_or_default();
 
-            out.push_str(&format!("{}. {} ({})", i + 1, stage.name, stage.tool_name()));
+            out.push_str(&format!(
+                "{}. {} ({})",
+                i + 1,
+                stage.name,
+                stage.tool_name()
+            ));
 
             if !deps.is_empty() {
                 out.push_str(&format!(" [depends: {}]", deps.join(", ")));
@@ -286,11 +291,7 @@ mod tests {
 
     #[test]
     fn test_linear_dag() {
-        let pipeline = make_test_pipeline(vec![
-            ("a", vec![]),
-            ("b", vec!["a"]),
-            ("c", vec!["b"]),
-        ]);
+        let pipeline = make_test_pipeline(vec![("a", vec![]), ("b", vec!["a"]), ("c", vec!["b"])]);
 
         let dag = DagBuilder::build(&pipeline).unwrap();
         let order = dag.topological_order_names().unwrap();
@@ -323,7 +324,10 @@ mod tests {
         let pipeline = make_test_pipeline(vec![("a", vec!["b"]), ("b", vec!["a"])]);
 
         let result = DagBuilder::build(&pipeline);
-        assert!(matches!(result, Err(ConflowError::CircularDependency { .. })));
+        assert!(matches!(
+            result,
+            Err(ConflowError::CircularDependency { .. })
+        ));
     }
 
     #[test]
@@ -331,16 +335,15 @@ mod tests {
         let pipeline = make_test_pipeline(vec![("a", vec!["nonexistent"])]);
 
         let result = DagBuilder::build(&pipeline);
-        assert!(matches!(result, Err(ConflowError::UnknownDependency { .. })));
+        assert!(matches!(
+            result,
+            Err(ConflowError::UnknownDependency { .. })
+        ));
     }
 
     #[test]
     fn test_depends_on_check() {
-        let pipeline = make_test_pipeline(vec![
-            ("a", vec![]),
-            ("b", vec!["a"]),
-            ("c", vec!["b"]),
-        ]);
+        let pipeline = make_test_pipeline(vec![("a", vec![]), ("b", vec!["a"]), ("c", vec!["b"])]);
 
         let dag = DagBuilder::build(&pipeline).unwrap();
 

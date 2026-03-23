@@ -110,10 +110,7 @@ impl PipelineValidator {
                 result.add_error(&format!("Stage '{}': Input pattern is empty", stage.name));
             }
             Input::Multiple(v) if v.is_empty() => {
-                result.add_error(&format!(
-                    "Stage '{}': Input list is empty",
-                    stage.name
-                ));
+                result.add_error(&format!("Stage '{}': Input list is empty", stage.name));
             }
             _ => {}
         }
@@ -165,7 +162,10 @@ impl PipelineValidator {
     }
 
     /// Check that required files exist (runtime validation)
-    pub fn validate_files(pipeline: &Pipeline, base_path: &Path) -> Result<Vec<String>, ConflowError> {
+    pub fn validate_files(
+        pipeline: &Pipeline,
+        base_path: &Path,
+    ) -> Result<Vec<String>, ConflowError> {
         let mut missing = Vec::new();
 
         for stage in &pipeline.stages {

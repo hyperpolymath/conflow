@@ -28,14 +28,17 @@ pub async fn run(files: Vec<PathBuf>, format: OutputFormat, verbose: bool) -> Re
         }
 
         match analyzer.analyze(file).await {
-            Ok(analysis) => {
-                match format {
-                    OutputFormat::Text => print_text_analysis(file, &analysis, verbose),
-                    OutputFormat::Json => print_json_analysis(file, &analysis)?,
-                }
-            }
+            Ok(analysis) => match format {
+                OutputFormat::Text => print_text_analysis(file, &analysis, verbose),
+                OutputFormat::Json => print_json_analysis(file, &analysis)?,
+            },
             Err(e) => {
-                eprintln!("{}: Failed to analyze {}: {}", "Error".red(), file.display(), e);
+                eprintln!(
+                    "{}: Failed to analyze {}: {}",
+                    "Error".red(),
+                    file.display(),
+                    e
+                );
             }
         }
     }
@@ -43,11 +46,7 @@ pub async fn run(files: Vec<PathBuf>, format: OutputFormat, verbose: bool) -> Re
     Ok(())
 }
 
-fn print_text_analysis(
-    file: &PathBuf,
-    analysis: &crate::analyzer::Analysis,
-    verbose: bool,
-) {
+fn print_text_analysis(file: &PathBuf, analysis: &crate::analyzer::Analysis, verbose: bool) {
     println!();
     println!("{}: {}", "Analyzing".bold(), file.display());
     println!("{}", "═".repeat(50));
@@ -68,17 +67,16 @@ fn print_text_analysis(
     print_check("Functions", analysis.complexity.has_functions);
     print_check("Constraints", analysis.complexity.has_constraints);
     print_check("Nested structures", analysis.complexity.nesting_depth > 2);
-    println!(
-        "  Nesting depth: {}",
-        analysis.complexity.nesting_depth
-    );
+    println!("  Nesting depth: {}", analysis.complexity.nesting_depth);
     println!();
 
     // Recommendation
     println!(
         "{}: Use {}",
         "Recommendation".bold(),
-        format!("{:?}", analysis.recommendation.primary).green().bold()
+        format!("{:?}", analysis.recommendation.primary)
+            .green()
+            .bold()
     );
     println!("{}", "═".repeat(50));
     println!();
@@ -140,10 +138,7 @@ fn print_text_analysis(
     println!();
 }
 
-fn print_json_analysis(
-    file: &PathBuf,
-    analysis: &crate::analyzer::Analysis,
-) -> Result<()> {
+fn print_json_analysis(file: &PathBuf, analysis: &crate::analyzer::Analysis) -> Result<()> {
     let json = serde_json::json!({
         "file": file.display().to_string(),
         "format": format!("{:?}", analysis.format),
@@ -167,9 +162,11 @@ fn print_json_analysis(
         }
     });
 
-    println!("{}", serde_json::to_string_pretty(&json).map_err(|e| {
-        miette::miette!("Failed to serialize JSON: {}", e)
-    })?);
+    println!(
+        "{}",
+        serde_json::to_string_pretty(&json)
+            .map_err(|e| { miette::miette!("Failed to serialize JSON: {}", e) })?
+    );
 
     Ok(())
 }

@@ -21,9 +21,8 @@ pub async fn run(pipeline_path: PathBuf, format: GraphFormat, _verbose: bool) ->
     }
 
     // Load pipeline
-    let pipeline = Pipeline::from_file(&pipeline_path).map_err(|e| {
-        miette::miette!("Failed to load pipeline: {}", e)
-    })?;
+    let pipeline = Pipeline::from_file(&pipeline_path)
+        .map_err(|e| miette::miette!("Failed to load pipeline: {}", e))?;
 
     // Build DAG
     let dag = DagBuilder::build(&pipeline)?;

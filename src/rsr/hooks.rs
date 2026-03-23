@@ -7,9 +7,9 @@
 use serde::{Deserialize, Serialize};
 use std::path::{Path, PathBuf};
 
-use crate::pipeline::{ExecutionOptions, Pipeline, PipelineExecutor, PipelineResult};
-use crate::executors::create_default_executors;
 use crate::cache::FilesystemCache;
+use crate::executors::create_default_executors;
+use crate::pipeline::{ExecutionOptions, Pipeline, PipelineExecutor, PipelineResult};
 use crate::ConflowError;
 
 /// Trigger types for RSR integration
@@ -17,9 +17,7 @@ use crate::ConflowError;
 #[serde(tag = "type", rename_all = "snake_case")]
 pub enum RsrTrigger {
     /// Validate pipeline configuration
-    ValidatePipeline {
-        path: PathBuf,
-    },
+    ValidatePipeline { path: PathBuf },
 
     /// Run pipeline
     RunPipeline {
@@ -29,9 +27,7 @@ pub enum RsrTrigger {
     },
 
     /// Check compliance
-    CheckCompliance {
-        requirements: Vec<String>,
-    },
+    CheckCompliance { requirements: Vec<String> },
 
     /// Initialize from template
     InitFromTemplate {
@@ -40,9 +36,7 @@ pub enum RsrTrigger {
     },
 
     /// Analyze configuration file
-    AnalyzeConfig {
-        file: PathBuf,
-    },
+    AnalyzeConfig { file: PathBuf },
 }
 
 /// Result of an RSR hook execution
@@ -105,21 +99,20 @@ impl RsrHooks {
     /// Execute a trigger
     pub async fn execute(&self, trigger: RsrTrigger) -> RsrHookResult {
         match trigger {
-            RsrTrigger::ValidatePipeline { path } => {
-                self.validate_pipeline(&path).await
-            }
-            RsrTrigger::RunPipeline { path, stages, no_cache } => {
-                self.run_pipeline(&path, stages, no_cache).await
-            }
+            RsrTrigger::ValidatePipeline { path } => self.validate_pipeline(&path).await,
+            RsrTrigger::RunPipeline {
+                path,
+                stages,
+                no_cache,
+            } => self.run_pipeline(&path, stages, no_cache).await,
             RsrTrigger::CheckCompliance { requirements } => {
                 self.check_compliance(&requirements).await
             }
-            RsrTrigger::InitFromTemplate { template, target_dir } => {
-                self.init_from_template(&template, &target_dir).await
-            }
-            RsrTrigger::AnalyzeConfig { file } => {
-                self.analyze_config(&file).await
-            }
+            RsrTrigger::InitFromTemplate {
+                template,
+                target_dir,
+            } => self.init_from_template(&template, &target_dir).await,
+            RsrTrigger::AnalyzeConfig { file } => self.analyze_config(&file).await,
         }
     }
 
@@ -128,32 +121,29 @@ impl RsrHooks {
         let full_path = self.working_dir.join(path);
 
         match Pipeline::from_file(&full_path) {
-            Ok(pipeline) => {
-                match crate::pipeline::PipelineValidator::validate(&pipeline) {
-                    Ok(validation) => {
-                        if validation.is_valid() {
-                            RsrHookResult::success("Pipeline is valid")
-                                .with_data(serde_json::json!({
-                                    "name": pipeline.name,
-                                    "stages": pipeline.stages.len(),
-                                    "warnings": validation.warnings,
-                                }))
-                        } else {
-                            RsrHookResult::failure("Pipeline validation failed")
-                                .with_data(serde_json::json!({
-                                    "errors": validation.errors,
-                                    "warnings": validation.warnings,
-                                }))
-                                .with_suggestions(vec![
-                                    "Check stage dependencies".into(),
-                                    "Verify tool configurations".into(),
-                                    "Run 'conflow validate' for details".into(),
-                                ])
-                        }
+            Ok(pipeline) => match crate::pipeline::PipelineValidator::validate(&pipeline) {
+                Ok(validation) => {
+                    if validation.is_valid() {
+                        RsrHookResult::success("Pipeline is valid").with_data(serde_json::json!({
+                            "name": pipeline.name,
+                            "stages": pipeline.stages.len(),
+                            "warnings": validation.warnings,
+                        }))
+                    } else {
+                        RsrHookResult::failure("Pipeline validation failed")
+                            .with_data(serde_json::json!({
+                                "errors": validation.errors,
+                                "warnings": validation.warnings,
+                            }))
+                            .with_suggestions(vec![
+                                "Check stage dependencies".into(),
+                                "Verify tool configurations".into(),
+                                "Run 'conflow validate' for details".into(),
+                            ])
                     }
-                    Err(e) => RsrHookResult::failure(format!("Validation error: {}", e)),
                 }
-            }
+                Err(e) => RsrHookResult::failure(format!("Validation error: {}", e)),
+            },
             Err(e) => RsrHookResult::failure(format!("Failed to load pipeline: {}", e))
                 .with_suggestions(vec![
                     "Run 'conflow init' to create a pipeline".into(),
@@ -197,7 +187,10 @@ impl RsrHooks {
             verbose: false,
         };
 
-        match executor.execute(&pipeline, &self.working_dir, &options).await {
+        match executor
+            .execute(&pipeline, &self.working_dir, &options)
+            .await
+        {
             Ok(result) => {
                 let outputs: Vec<String> = result
                     .results
@@ -207,12 +200,13 @@ impl RsrHooks {
                     .collect();
 
                 if result.success {
-                    RsrHookResult::success("Pipeline completed successfully")
-                        .with_data(serde_json::json!({
+                    RsrHookResult::success("Pipeline completed successfully").with_data(
+                        serde_json::json!({
                             "duration_ms": result.duration.as_millis(),
                             "stages_run": result.results.len(),
                             "outputs": outputs,
-                        }))
+                        }),
+                    )
                 } else {
                     let failed: Vec<String> = result
                         .results
@@ -221,11 +215,10 @@ impl RsrHooks {
                         .map(|(name, _)| name.clone())
                         .collect();
 
-                    RsrHookResult::failure("Pipeline failed")
-                        .with_data(serde_json::json!({
-                            "failed_stages": failed,
-                            "duration_ms": result.duration.as_millis(),
-                        }))
+                    RsrHookResult::failure("Pipeline failed").with_data(serde_json::json!({
+                        "failed_stages": failed,
+                        "duration_ms": result.duration.as_millis(),
+                    }))
                 }
             }
             Err(e) => RsrHookResult::failure(format!("Pipeline execution failed: {}", e)),
@@ -241,28 +234,26 @@ impl RsrHooks {
         if requirements.is_empty() {
             // Check all requirements
             match checker.check(&self.working_dir) {
-                Ok(report) => {
-                    RsrHookResult::success(format!(
-                        "Compliance: {} ({:.0}%)",
-                        report.level.description(),
-                        report.score * 100.0
-                    ))
-                    .with_data(serde_json::json!({
-                        "level": format!("{:?}", report.level),
-                        "score": report.score,
-                        "stats": {
-                            "total": report.stats.total,
-                            "passed": report.stats.passed,
-                            "failed": report.stats.failed,
-                        },
-                        "requirements": report.requirements.iter().map(|r| {
-                            serde_json::json!({
-                                "id": r.requirement_id,
-                                "met": r.met,
-                            })
-                        }).collect::<Vec<_>>(),
-                    }))
-                }
+                Ok(report) => RsrHookResult::success(format!(
+                    "Compliance: {} ({:.0}%)",
+                    report.level.description(),
+                    report.score * 100.0
+                ))
+                .with_data(serde_json::json!({
+                    "level": format!("{:?}", report.level),
+                    "score": report.score,
+                    "stats": {
+                        "total": report.stats.total,
+                        "passed": report.stats.passed,
+                        "failed": report.stats.failed,
+                    },
+                    "requirements": report.requirements.iter().map(|r| {
+                        serde_json::json!({
+                            "id": r.requirement_id,
+                            "met": r.met,
+                        })
+                    }).collect::<Vec<_>>(),
+                })),
                 Err(e) => RsrHookResult::failure(format!("Compliance check failed: {}", e)),
             }
         } else {
@@ -281,16 +272,15 @@ impl RsrHooks {
                         )
                     };
 
-                    RsrHookResult::success(message)
-                        .with_data(serde_json::json!({
-                            "requirements": results.iter().map(|r| {
-                                serde_json::json!({
-                                    "id": r.requirement_id,
-                                    "met": r.met,
-                                    "remediation": r.remediation,
-                                })
-                            }).collect::<Vec<_>>(),
-                        }))
+                    RsrHookResult::success(message).with_data(serde_json::json!({
+                        "requirements": results.iter().map(|r| {
+                            serde_json::json!({
+                                "id": r.requirement_id,
+                                "met": r.met,
+                                "remediation": r.remediation,
+                            })
+                        }).collect::<Vec<_>>(),
+                    }))
                 }
                 Err(e) => RsrHookResult::failure(format!("Compliance check failed: {}", e)),
             }
@@ -301,10 +291,16 @@ impl RsrHooks {
     async fn init_from_template(&self, template: &str, target_dir: &Path) -> RsrHookResult {
         // This would call the init command logic
         // For now, return a placeholder
-        RsrHookResult::success(format!("Would initialize '{}' template in {}", template, target_dir.display()))
-            .with_suggestions(vec![
-                format!("Run: cd {} && conflow init --template {}", target_dir.display(), template),
-            ])
+        RsrHookResult::success(format!(
+            "Would initialize '{}' template in {}",
+            template,
+            target_dir.display()
+        ))
+        .with_suggestions(vec![format!(
+            "Run: cd {} && conflow init --template {}",
+            target_dir.display(),
+            template
+        )])
     }
 
     /// Analyze a configuration file
@@ -315,26 +311,24 @@ impl RsrHooks {
         let analyzer = ConfigAnalyzer::new();
 
         match analyzer.analyze(&full_path).await {
-            Ok(analysis) => {
-                RsrHookResult::success(format!(
-                    "Recommended tool: {:?}",
-                    analysis.recommendation.primary
-                ))
-                .with_data(serde_json::json!({
-                    "format": format!("{:?}", analysis.format),
-                    "complexity": {
-                        "has_logic": analysis.complexity.has_logic,
-                        "has_functions": analysis.complexity.has_functions,
-                        "has_constraints": analysis.complexity.has_constraints,
-                        "nesting_depth": analysis.complexity.nesting_depth,
-                    },
-                    "recommendation": {
-                        "primary": format!("{:?}", analysis.recommendation.primary),
-                        "rationale": analysis.recommendation.rationale,
-                        "combined_approach": analysis.recommendation.combined_approach,
-                    },
-                }))
-            }
+            Ok(analysis) => RsrHookResult::success(format!(
+                "Recommended tool: {:?}",
+                analysis.recommendation.primary
+            ))
+            .with_data(serde_json::json!({
+                "format": format!("{:?}", analysis.format),
+                "complexity": {
+                    "has_logic": analysis.complexity.has_logic,
+                    "has_functions": analysis.complexity.has_functions,
+                    "has_constraints": analysis.complexity.has_constraints,
+                    "nesting_depth": analysis.complexity.nesting_depth,
+                },
+                "recommendation": {
+                    "primary": format!("{:?}", analysis.recommendation.primary),
+                    "rationale": analysis.recommendation.rationale,
+                    "combined_approach": analysis.recommendation.combined_approach,
+                },
+            })),
             Err(e) => RsrHookResult::failure(format!("Analysis failed: {}", e)),
         }
     }
@@ -396,26 +390,37 @@ pub mod rpc {
     }
 
     /// Handle an RPC request
-    pub async fn handle_request(
-        hooks: &RsrHooks,
-        request: RpcRequest,
-    ) -> RpcResponse {
+    pub async fn handle_request(hooks: &RsrHooks, request: RpcRequest) -> RpcResponse {
         let trigger = match request.method.as_str() {
             "conflow.validate" => {
-                let path = request.params.get("path")
+                let path = request
+                    .params
+                    .get("path")
                     .and_then(|v| v.as_str())
                     .unwrap_or(".conflow.yaml");
-                RsrTrigger::ValidatePipeline { path: PathBuf::from(path) }
+                RsrTrigger::ValidatePipeline {
+                    path: PathBuf::from(path),
+                }
             }
             "conflow.run" => {
-                let path = request.params.get("path")
+                let path = request
+                    .params
+                    .get("path")
                     .and_then(|v| v.as_str())
                     .unwrap_or(".conflow.yaml");
-                let stages = request.params.get("stages")
+                let stages = request
+                    .params
+                    .get("stages")
                     .and_then(|v| v.as_array())
-                    .map(|arr| arr.iter().filter_map(|v| v.as_str().map(String::from)).collect())
+                    .map(|arr| {
+                        arr.iter()
+                            .filter_map(|v| v.as_str().map(String::from))
+                            .collect()
+                    })
                     .unwrap_or_default();
-                let no_cache = request.params.get("no_cache")
+                let no_cache = request
+                    .params
+                    .get("no_cache")
                     .and_then(|v| v.as_bool())
                     .unwrap_or(false);
                 RsrTrigger::RunPipeline {
@@ -425,17 +430,27 @@ pub mod rpc {
                 }
             }
             "conflow.compliance" => {
-                let requirements = request.params.get("requirements")
+                let requirements = request
+                    .params
+                    .get("requirements")
                     .and_then(|v| v.as_array())
-                    .map(|arr| arr.iter().filter_map(|v| v.as_str().map(String::from)).collect())
+                    .map(|arr| {
+                        arr.iter()
+                            .filter_map(|v| v.as_str().map(String::from))
+                            .collect()
+                    })
                     .unwrap_or_default();
                 RsrTrigger::CheckCompliance { requirements }
             }
             "conflow.analyze" => {
-                let file = request.params.get("file")
+                let file = request
+                    .params
+                    .get("file")
                     .and_then(|v| v.as_str())
                     .unwrap_or("config.yaml");
-                RsrTrigger::AnalyzeConfig { file: PathBuf::from(file) }
+                RsrTrigger::AnalyzeConfig {
+                    file: PathBuf::from(file),
+                }
             }
             _ => {
                 return RpcResponse::error(
@@ -470,9 +485,11 @@ mod tests {
         let temp = TempDir::new().unwrap();
         let hooks = RsrHooks::new(temp.path().to_path_buf());
 
-        let result = hooks.execute(RsrTrigger::ValidatePipeline {
-            path: PathBuf::from(".conflow.yaml"),
-        }).await;
+        let result = hooks
+            .execute(RsrTrigger::ValidatePipeline {
+                path: PathBuf::from(".conflow.yaml"),
+            })
+            .await;
 
         assert!(!result.success);
         assert!(result.message.contains("Failed to load"));
@@ -494,13 +511,16 @@ stages:
       command: vet
     input: "*.json"
 "#,
-        ).unwrap();
+        )
+        .unwrap();
 
         let hooks = RsrHooks::new(temp.path().to_path_buf());
 
-        let result = hooks.execute(RsrTrigger::ValidatePipeline {
-            path: PathBuf::from(".conflow.yaml"),
-        }).await;
+        let result = hooks
+            .execute(RsrTrigger::ValidatePipeline {
+                path: PathBuf::from(".conflow.yaml"),
+            })
+            .await;
 
         assert!(result.success);
     }

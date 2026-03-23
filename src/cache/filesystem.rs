@@ -32,7 +32,10 @@ impl FilesystemCache {
             })?;
         }
 
-        Ok(Self { cache_dir, base_dir })
+        Ok(Self {
+            cache_dir,
+            base_dir,
+        })
     }
 
     /// Create cache with default directory
@@ -63,8 +66,8 @@ impl FilesystemCache {
         }
 
         // Walk cache directory
-        for prefix_dir in std::fs::read_dir(&self.cache_dir)
-            .map_err(|e| ConflowError::CacheError {
+        for prefix_dir in
+            std::fs::read_dir(&self.cache_dir).map_err(|e| ConflowError::CacheError {
                 message: format!("Failed to read cache directory: {}", e),
             })?
         {
@@ -78,8 +81,8 @@ impl FilesystemCache {
                 continue;
             }
 
-            for entry_file in std::fs::read_dir(&prefix_dir)
-                .map_err(|e| ConflowError::CacheError {
+            for entry_file in
+                std::fs::read_dir(&prefix_dir).map_err(|e| ConflowError::CacheError {
                     message: format!("Failed to read cache subdirectory: {}", e),
                 })?
             {
@@ -117,17 +120,17 @@ impl Cache for FilesystemCache {
         }
 
         // Read cached entry
-        let content = tokio::fs::read_to_string(&path).await.map_err(|e| {
-            ConflowError::CacheError {
-                message: format!("Failed to read cache entry: {}", e),
-            }
-        })?;
+        let content =
+            tokio::fs::read_to_string(&path)
+                .await
+                .map_err(|e| ConflowError::CacheError {
+                    message: format!("Failed to read cache entry: {}", e),
+                })?;
 
-        let entry: CachedEntry = serde_json::from_str(&content).map_err(|e| {
-            ConflowError::CacheError {
+        let entry: CachedEntry =
+            serde_json::from_str(&content).map_err(|e| ConflowError::CacheError {
                 message: format!("Failed to parse cache entry: {}", e),
-            }
-        })?;
+            })?;
 
         // Verify outputs still exist
         for output in &entry.result.outputs {
@@ -152,11 +155,11 @@ impl Cache for FilesystemCache {
 
         // Create parent directory
         if let Some(parent) = path.parent() {
-            tokio::fs::create_dir_all(parent).await.map_err(|e| {
-                ConflowError::CacheError {
+            tokio::fs::create_dir_all(parent)
+                .await
+                .map_err(|e| ConflowError::CacheError {
                     message: format!("Failed to create cache directory: {}", e),
-                }
-            })?;
+                })?;
         }
 
         let entry = CachedEntry {
@@ -170,9 +173,11 @@ impl Cache for FilesystemCache {
             message: format!("Failed to serialize cache entry: {}", e),
         })?;
 
-        tokio::fs::write(&path, json).await.map_err(|e| ConflowError::CacheError {
-            message: format!("Failed to write cache entry: {}", e),
-        })?;
+        tokio::fs::write(&path, json)
+            .await
+            .map_err(|e| ConflowError::CacheError {
+                message: format!("Failed to write cache entry: {}", e),
+            })?;
 
         Ok(())
     }
@@ -182,11 +187,11 @@ impl Cache for FilesystemCache {
         let path = self.cache_path(&key);
 
         if path.exists() {
-            tokio::fs::remove_file(&path).await.map_err(|e| {
-                ConflowError::CacheError {
+            tokio::fs::remove_file(&path)
+                .await
+                .map_err(|e| ConflowError::CacheError {
                     message: format!("Failed to remove cache entry: {}", e),
-                }
-            })?;
+                })?;
         }
 
         Ok(())
@@ -194,17 +199,17 @@ impl Cache for FilesystemCache {
 
     async fn clear(&self) -> Result<(), ConflowError> {
         if self.cache_dir.exists() {
-            tokio::fs::remove_dir_all(&self.cache_dir).await.map_err(|e| {
-                ConflowError::CacheError {
+            tokio::fs::remove_dir_all(&self.cache_dir)
+                .await
+                .map_err(|e| ConflowError::CacheError {
                     message: format!("Failed to clear cache: {}", e),
-                }
-            })?;
+                })?;
 
-            tokio::fs::create_dir_all(&self.cache_dir).await.map_err(|e| {
-                ConflowError::CacheError {
+            tokio::fs::create_dir_all(&self.cache_dir)
+                .await
+                .map_err(|e| ConflowError::CacheError {
                     message: format!("Failed to recreate cache directory: {}", e),
-                }
-            })?;
+                })?;
         }
 
         Ok(())

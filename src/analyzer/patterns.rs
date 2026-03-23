@@ -83,18 +83,27 @@ fn has_homogeneous_lists(content: &str) -> bool {
 }
 
 fn is_environment_config(content: &str) -> bool {
-    let env_keywords = ["dev", "staging", "prod", "production", "test", "development"];
-    env_keywords.iter().any(|k| content.to_lowercase().contains(k))
+    let env_keywords = [
+        "dev",
+        "staging",
+        "prod",
+        "production",
+        "test",
+        "development",
+    ];
+    env_keywords
+        .iter()
+        .any(|k| content.to_lowercase().contains(k))
 }
 
 fn is_schema_definition(content: &str) -> bool {
     // Look for type definition patterns
     let schema_patterns = [
-        "#",         // CUE definitions
-        "$schema",   // JSON Schema
-        "type:",     // Various
+        "#",           // CUE definitions
+        "$schema",     // JSON Schema
+        "type:",       // Various
         "properties:", // JSON Schema
-        "required:", // JSON Schema
+        "required:",   // JSON Schema
     ];
     schema_patterns.iter().any(|p| content.contains(p))
 }
@@ -102,21 +111,23 @@ fn is_schema_definition(content: &str) -> bool {
 fn is_templated(content: &str) -> bool {
     // Look for template variable patterns
     let template_patterns = [
-        "{{", "}}",           // Mustache/Handlebars
-        "${", "}",            // Shell/Terraform style
-        "<%", "%>",           // ERB style
-        "[[", "]]",           // Alternative brackets
+        "{{", "}}", // Mustache/Handlebars
+        "${", "}", // Shell/Terraform style
+        "<%", "%>", // ERB style
+        "[[", "]]", // Alternative brackets
     ];
 
-    template_patterns.chunks(2).any(|pair| {
-        content.contains(pair[0]) && content.contains(pair[1])
-    })
+    template_patterns
+        .chunks(2)
+        .any(|pair| content.contains(pair[0]) && content.contains(pair[1]))
 }
 
 fn is_resource_definition(content: &str) -> bool {
     let resource_patterns = [
-        "apiVersion:", "kind:", // Kubernetes
-        "resource \"", "provider \"", // Terraform
+        "apiVersion:",
+        "kind:", // Kubernetes
+        "resource \"",
+        "provider \"",              // Terraform
         "AWSTemplateFormatVersion", // CloudFormation
     ];
     resource_patterns.iter().any(|p| content.contains(p))

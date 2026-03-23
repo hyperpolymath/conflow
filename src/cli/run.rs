@@ -29,9 +29,8 @@ pub async fn run(
     }
 
     // Load pipeline
-    let pipeline = Pipeline::from_file(&pipeline_path).map_err(|e| {
-        miette::miette!("Failed to load pipeline: {}", e)
-    })?;
+    let pipeline = Pipeline::from_file(&pipeline_path)
+        .map_err(|e| miette::miette!("Failed to load pipeline: {}", e))?;
 
     // Validate pipeline
     let validation = PipelineValidator::validate(&pipeline)?;
@@ -67,8 +66,14 @@ pub async fn run(
         for tool in &missing_tools {
             eprintln!("  {} {}", "✗".red(), tool);
             match tool.as_str() {
-                "cue" => eprintln!("    Install: {}", "https://cuelang.org/docs/install/".cyan()),
-                "nickel" => eprintln!("    Install: {}", "https://nickel-lang.org/getting-started/".cyan()),
+                "cue" => eprintln!(
+                    "    Install: {}",
+                    "https://cuelang.org/docs/install/".cyan()
+                ),
+                "nickel" => eprintln!(
+                    "    Install: {}",
+                    "https://nickel-lang.org/getting-started/".cyan()
+                ),
                 _ => {}
             }
         }
@@ -76,9 +81,8 @@ pub async fn run(
     }
 
     // Set up cache
-    let working_dir = std::env::current_dir().map_err(|e| {
-        miette::miette!("Failed to get current directory: {}", e)
-    })?;
+    let working_dir = std::env::current_dir()
+        .map_err(|e| miette::miette!("Failed to get current directory: {}", e))?;
 
     if !no_cache && pipeline.cache.enabled {
         let cache = FilesystemCache::new(

@@ -66,7 +66,12 @@ impl StageProgress {
         use colored::Colorize;
 
         if let Some(stage) = self.stages.get(self.current) {
-            println!("\x1b[1A\x1b[2K  {} {} - {}", "✗".red(), stage, error.dimmed());
+            println!(
+                "\x1b[1A\x1b[2K  {} {} - {}",
+                "✗".red(),
+                stage,
+                error.dimmed()
+            );
         }
     }
 
@@ -74,7 +79,11 @@ impl StageProgress {
         use colored::Colorize;
 
         if let Some(stage) = self.stages.get(self.current) {
-            println!("\x1b[1A\x1b[2K  {} {} (skipped)", "○".dimmed(), stage.dimmed());
+            println!(
+                "\x1b[1A\x1b[2K  {} {} (skipped)",
+                "○".dimmed(),
+                stage.dimmed()
+            );
         }
         self.current += 1;
     }
@@ -90,10 +99,7 @@ mod tests {
 
     #[test]
     fn test_stage_progress() {
-        let mut progress = StageProgress::new(vec![
-            "Stage 1".to_string(),
-            "Stage 2".to_string(),
-        ]);
+        let mut progress = StageProgress::new(vec!["Stage 1".to_string(), "Stage 2".to_string()]);
 
         assert!(!progress.is_complete());
         progress.complete();

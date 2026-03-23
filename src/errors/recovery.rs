@@ -130,7 +130,10 @@ impl RecoverySuggestion {
         Self {
             action: format!("Add files matching pattern '{}'", pattern),
             steps: vec![
-                format!("Stage '{}' expects input files matching: {}", stage, pattern),
+                format!(
+                    "Stage '{}' expects input files matching: {}",
+                    stage, pattern
+                ),
                 "Either create the files or update the pattern".into(),
             ],
             commands: vec![

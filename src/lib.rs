@@ -3,9 +3,9 @@
 
 //! # conflow - Configuration Flow Orchestrator
 //!
-//! `conflow` is a high-assurance orchestration tool designed to manage the 
-//! lifecycle of complex configuration ecosystems. It intelligently chooses 
-//! between CUE (for validation-heavy data) and Nickel (for logic-heavy 
+//! `conflow` is a high-assurance orchestration tool designed to manage the
+//! lifecycle of complex configuration ecosystems. It intelligently chooses
+//! between CUE (for validation-heavy data) and Nickel (for logic-heavy
 //! configuration) based on the problem domain.
 //!
 //! CORE ARCHITECTURE:

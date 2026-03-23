@@ -39,7 +39,8 @@ pub async fn run(pipeline_path: PathBuf, verbose: bool) -> Result<()> {
     let validation = PipelineValidator::validate(&pipeline)?;
 
     // Check for file existence
-    let cwd = std::env::current_dir().map_err(|e| miette::miette!("Failed to get current directory: {}", e))?;
+    let cwd = std::env::current_dir()
+        .map_err(|e| miette::miette!("Failed to get current directory: {}", e))?;
     let missing_files = PipelineValidator::validate_files(&pipeline, &cwd)?;
 
     // Report results
@@ -82,7 +83,12 @@ pub async fn run(pipeline_path: PathBuf, verbose: bool) -> Result<()> {
             } else {
                 format!(" [depends: {}]", stage.depends_on.join(", "))
             };
-            println!("    - {} ({}){}", stage.name, stage.tool_name(), deps.dimmed());
+            println!(
+                "    - {} ({}){}",
+                stage.name,
+                stage.tool_name(),
+                deps.dimmed()
+            );
         }
     }
 
@@ -90,10 +96,7 @@ pub async fn run(pipeline_path: PathBuf, verbose: bool) -> Result<()> {
 
     if has_issues {
         if validation.is_valid() && missing_files.is_empty() {
-            println!(
-                "{}",
-                "Pipeline is valid but has warnings.".yellow().bold()
-            );
+            println!("{}", "Pipeline is valid but has warnings.".yellow().bold());
             Ok(())
         } else {
             Err(miette::miette!("Pipeline validation failed"))

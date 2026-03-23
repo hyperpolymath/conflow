@@ -123,7 +123,12 @@ impl PipelineExecutor {
                 if let Some(ref cache) = self.cache {
                     let cache_read = cache.read().await;
                     if let Ok(Some(cached)) = cache_read.get(stage).await {
-                        println!("  {} {} {}", "✓".green(), stage.name.bold(), "(cached)".dimmed());
+                        println!(
+                            "  {} {} {}",
+                            "✓".green(),
+                            stage.name.bold(),
+                            "(cached)".dimmed()
+                        );
                         results.insert(stage.name.clone(), cached);
                         continue;
                     }
@@ -179,7 +184,11 @@ impl PipelineExecutor {
         if all_success {
             println!(
                 "{}",
-                format!("Pipeline completed successfully in {:.2}s", duration.as_secs_f64()).green()
+                format!(
+                    "Pipeline completed successfully in {:.2}s",
+                    duration.as_secs_f64()
+                )
+                .green()
             );
         } else {
             println!(
@@ -205,11 +214,12 @@ impl PipelineExecutor {
     ) -> Result<ExecutionResult, ConflowError> {
         let tool_name = stage.tool_name();
 
-        let executor = self.executors.get(tool_name).ok_or_else(|| {
-            ConflowError::ExecutorNotFound {
-                tool: tool_name.to_string(),
-            }
-        })?;
+        let executor =
+            self.executors
+                .get(tool_name)
+                .ok_or_else(|| ConflowError::ExecutorNotFound {
+                    tool: tool_name.to_string(),
+                })?;
 
         // Resolve stage input if it references another stage
         let resolved_input = self.resolve_stage_input(stage, previous_results)?;
@@ -226,15 +236,16 @@ impl PipelineExecutor {
         previous_results: &HashMap<String, ExecutionResult>,
     ) -> Result<Option<Vec<std::path::PathBuf>>, ConflowError> {
         if let Some(from_stage) = stage.input.references_stage() {
-            let prev = previous_results.get(from_stage).ok_or_else(|| {
-                ConflowError::ExecutionFailed {
-                    message: format!(
-                        "Stage '{}' depends on '{}' which hasn't been executed",
-                        stage.name, from_stage
-                    ),
-                    help: None,
-                }
-            })?;
+            let prev =
+                previous_results
+                    .get(from_stage)
+                    .ok_or_else(|| ConflowError::ExecutionFailed {
+                        message: format!(
+                            "Stage '{}' depends on '{}' which hasn't been executed",
+                            stage.name, from_stage
+                        ),
+                        help: None,
+                    })?;
 
             Ok(Some(prev.outputs.clone()))
         } else {

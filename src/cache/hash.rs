@@ -30,23 +30,23 @@ impl ContentHasher {
         self.hasher.update(stage.name.as_bytes());
 
         // Hash tool configuration
-        let tool_json = serde_json::to_string(&stage.tool)
-            .map_err(|e| ConflowError::CacheError {
+        let tool_json =
+            serde_json::to_string(&stage.tool).map_err(|e| ConflowError::CacheError {
                 message: format!("Failed to serialize tool config: {}", e),
             })?;
         self.hasher.update(tool_json.as_bytes());
 
         // Hash input specification
-        let input_json = serde_json::to_string(&stage.input)
-            .map_err(|e| ConflowError::CacheError {
+        let input_json =
+            serde_json::to_string(&stage.input).map_err(|e| ConflowError::CacheError {
                 message: format!("Failed to serialize input config: {}", e),
             })?;
         self.hasher.update(input_json.as_bytes());
 
         // Hash output specification
         if let Some(ref output) = stage.output {
-            let output_json = serde_json::to_string(output)
-                .map_err(|e| ConflowError::CacheError {
+            let output_json =
+                serde_json::to_string(output).map_err(|e| ConflowError::CacheError {
                     message: format!("Failed to serialize output config: {}", e),
                 })?;
             self.hasher.update(output_json.as_bytes());
@@ -103,8 +103,9 @@ impl ContentHasher {
                 base_dir.join(pattern).to_string_lossy().to_string()
             };
 
-            let matches = glob::glob(&full_pattern)
-                .map_err(|e| ConflowError::GlobPattern { message: e.to_string() })?;
+            let matches = glob::glob(&full_pattern).map_err(|e| ConflowError::GlobPattern {
+                message: e.to_string(),
+            })?;
 
             for entry in matches {
                 if let Ok(path) = entry {

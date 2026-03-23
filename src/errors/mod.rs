@@ -26,14 +26,8 @@ pub enum ConflowError {
     // Tool Errors
     // ─────────────────────────────────────────────────────────────────────────
     #[error("Tool '{tool}' not found")]
-    #[diagnostic(
-        code(conflow::tool_not_found),
-        help("{suggestion}")
-    )]
-    ToolNotFound {
-        tool: String,
-        suggestion: String,
-    },
+    #[diagnostic(code(conflow::tool_not_found), help("{suggestion}"))]
+    ToolNotFound { tool: String, suggestion: String },
 
     #[error("Tool '{tool}' execution failed: {error}")]
     #[diagnostic(code(conflow::tool_execution_failed))]
@@ -203,31 +197,41 @@ pub enum ConflowError {
 
 impl From<std::io::Error> for ConflowError {
     fn from(e: std::io::Error) -> Self {
-        Self::Io { message: e.to_string() }
+        Self::Io {
+            message: e.to_string(),
+        }
     }
 }
 
 impl From<serde_yaml::Error> for ConflowError {
     fn from(e: serde_yaml::Error) -> Self {
-        Self::Yaml { message: e.to_string() }
+        Self::Yaml {
+            message: e.to_string(),
+        }
     }
 }
 
 impl From<serde_json::Error> for ConflowError {
     fn from(e: serde_json::Error) -> Self {
-        Self::Json { message: e.to_string() }
+        Self::Json {
+            message: e.to_string(),
+        }
     }
 }
 
 impl From<toml::de::Error> for ConflowError {
     fn from(e: toml::de::Error) -> Self {
-        Self::Toml { message: e.to_string() }
+        Self::Toml {
+            message: e.to_string(),
+        }
     }
 }
 
 impl From<glob::PatternError> for ConflowError {
     fn from(e: glob::PatternError) -> Self {
-        Self::GlobPattern { message: e.to_string() }
+        Self::GlobPattern {
+            message: e.to_string(),
+        }
     }
 }
 
@@ -279,7 +283,9 @@ impl ConflowError {
     fn parse_cue_error(stderr: &str) -> Option<String> {
         // Common CUE error patterns and helpful suggestions
         if stderr.contains("undefined field") {
-            Some("A field is used but not defined in the schema. Check your CUE definitions.".into())
+            Some(
+                "A field is used but not defined in the schema. Check your CUE definitions.".into(),
+            )
         } else if stderr.contains("conflicting values") {
             Some("Two values cannot be unified. This often means a constraint was violated.".into())
         } else if stderr.contains("cannot use") {

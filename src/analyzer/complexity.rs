@@ -67,8 +67,8 @@ fn check_logic_patterns(content: &str) -> bool {
     // Common conditional patterns across formats
     let patterns = [
         "if ", "else ", "then ", " ? ", " : ", // Ternary and conditionals
-        "match ", "case ", "when ",            // Pattern matching
-        "&&", "||", " and ", " or ",           // Logical operators
+        "match ", "case ", "when ", // Pattern matching
+        "&&", "||", " and ", " or ", // Logical operators
     ];
 
     patterns.iter().any(|p| content.contains(p))
@@ -91,15 +91,21 @@ fn check_function_patterns(content: &str) -> bool {
 
 fn check_constraint_patterns(content: &str) -> bool {
     let patterns = [
-        ">=", "<=", ">", "<", // Comparison operators
-        "& ", "| ",           // CUE unification/disjunction
-        "=~",                 // Regex matching
-        "!~",                 // Negative regex
-        "min:", "max:",       // JSON Schema style
-        "minLength", "maxLength",
+        ">=",
+        "<=",
+        ">",
+        "<", // Comparison operators
+        "& ",
+        "| ", // CUE unification/disjunction
+        "=~", // Regex matching
+        "!~", // Negative regex
+        "min:",
+        "max:", // JSON Schema style
+        "minLength",
+        "maxLength",
         "pattern:",
-        "| *",  // CUE default
-        "_|_",  // CUE bottom
+        "| *", // CUE default
+        "_|_", // CUE bottom
     ];
 
     patterns.iter().any(|p| content.contains(p))
@@ -107,12 +113,18 @@ fn check_constraint_patterns(content: &str) -> bool {
 
 fn check_generation_patterns(content: &str) -> bool {
     let patterns = [
-        "for ", "foreach ",           // Loop patterns
-        "map(", "filter(", "fold(",   // Functional patterns
-        "Array.from", "Array.map",    // Array generation
-        "std.range", "std.map",       // Nickel stdlib
-        "[for ", "{ for ",            // CUE comprehensions
-        "...",                        // Spread operators
+        "for ",
+        "foreach ", // Loop patterns
+        "map(",
+        "filter(",
+        "fold(", // Functional patterns
+        "Array.from",
+        "Array.map", // Array generation
+        "std.range",
+        "std.map", // Nickel stdlib
+        "[for ",
+        "{ for ", // CUE comprehensions
+        "...",    // Spread operators
     ];
 
     patterns.iter().any(|p| content.contains(p))
@@ -147,7 +159,8 @@ fn check_repetition(content: &str) -> bool {
     }
 
     // Look for repeated patterns (simplified)
-    let mut pattern_counts: std::collections::HashMap<&str, usize> = std::collections::HashMap::new();
+    let mut pattern_counts: std::collections::HashMap<&str, usize> =
+        std::collections::HashMap::new();
 
     for line in &lines {
         let trimmed = line.trim();

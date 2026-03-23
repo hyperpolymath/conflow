@@ -27,10 +27,7 @@ pub async fn run(pipeline_path: PathBuf, debounce_ms: u64, verbose: bool) -> Res
     }
 
     println!("{}", "Starting watch mode...".bold());
-    println!(
-        "Watching for changes (debounce: {}ms)",
-        debounce_ms
-    );
+    println!("Watching for changes (debounce: {}ms)", debounce_ms);
     println!("Press {} to exit.", "Ctrl+C".cyan());
     println!();
 

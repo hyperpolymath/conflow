@@ -42,12 +42,11 @@ fn default_version() -> String {
 impl Pipeline {
     /// Load pipeline from a YAML file
     pub fn from_file(path: &std::path::Path) -> Result<Self, crate::ConflowError> {
-        let content = std::fs::read_to_string(path).map_err(|e| {
-            crate::ConflowError::FileReadError {
+        let content =
+            std::fs::read_to_string(path).map_err(|e| crate::ConflowError::FileReadError {
                 path: path.to_path_buf(),
                 error: e.to_string(),
-            }
-        })?;
+            })?;
 
         Self::from_yaml(&content)
     }

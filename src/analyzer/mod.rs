@@ -41,12 +41,13 @@ impl ConfigAnalyzer {
     /// Analyze a configuration file
     pub async fn analyze(&self, path: &Path) -> Result<Analysis, ConflowError> {
         // Read file content
-        let content = tokio::fs::read_to_string(path).await.map_err(|e| {
-            ConflowError::FileReadError {
-                path: path.to_path_buf(),
-                error: e.to_string(),
-            }
-        })?;
+        let content =
+            tokio::fs::read_to_string(path)
+                .await
+                .map_err(|e| ConflowError::FileReadError {
+                    path: path.to_path_buf(),
+                    error: e.to_string(),
+                })?;
 
         // Detect format
         let format = config_detector::detect_format(&content, path)?;

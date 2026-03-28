@@ -20,6 +20,7 @@ pub mod cache;
 pub mod cli;
 pub mod errors;
 pub mod executors;
+pub mod groove;
 pub mod pipeline;
 pub mod rsr;
 pub mod utils;

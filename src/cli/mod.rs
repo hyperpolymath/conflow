@@ -127,6 +127,18 @@ pub enum Commands {
         #[clap(subcommand)]
         action: RsrAction,
     },
+
+    /// Start the groove discovery server
+    ///
+    /// Runs a lightweight HTTP server exposing conflow's capabilities via
+    /// the Gossamer groove protocol. Other groove-aware systems (PanLL,
+    /// Gossamer, etc.) can discover conflow by probing
+    /// GET /.well-known/groove on the configured port.
+    Serve {
+        /// Port to bind the groove server to
+        #[clap(short, long, default_value = "7700")]
+        port: u16,
+    },
 }
 
 /// RSR integration actions

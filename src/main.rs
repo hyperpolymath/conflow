@@ -52,10 +52,23 @@ async fn main() -> Result<()> {
             no_cache,
             dry_run,
         } => conflow::cli::run::run(pipeline, stage, no_cache, dry_run, cli.verbose).await,
-        // ... [other commands: Watch, Validate, Cache, Graph, Rsr]
-        _ => {
-            // Logic for remaining commands implemented in their respective modules.
-            Ok(())
+        // Watch mode
+        Commands::Watch { pipeline, debounce } => {
+            conflow::cli::watch::run(pipeline, debounce, cli.verbose).await
         }
+        // Config validation
+        Commands::Validate { pipeline } => {
+            conflow::cli::validate::run(pipeline, cli.verbose).await
+        }
+        // Cache management
+        Commands::Cache { action } => conflow::cli::cache::run(action, cli.verbose).await,
+        // Pipeline graph visualisation
+        Commands::Graph { pipeline, format } => {
+            conflow::cli::graph::run(pipeline, format, cli.verbose).await
+        }
+        // RSR compliance
+        Commands::Rsr { action } => conflow::cli::rsr::run(action, cli.verbose).await,
+        // Groove discovery server
+        Commands::Serve { port } => conflow::groove::run(port).await,
     }
 }

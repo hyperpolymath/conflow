@@ -85,3 +85,17 @@
 
 ## Priority
 - **HIGH** — 45 Rust source files that CANNOT EVEN COMPILE. The build is broken. ~20 files have inline test modules but none can run. Fix the compilation error in pipeline/validation.rs first, then verify test coverage. A configuration flow tool with shell execution needs security testing as a top priority.
+
+## Session 9 additions (2026-04-04)
+
+### What Was Added
+
+| Area | Tests Added | Location |
+|------|-------------|----------|
+| Benchmarks | Extended `benches/conflow_bench.rs` with `bench_analyzer_nickel` and `bench_analyzer_cue` added to `format_benches` group | `benches/conflow_bench.rs` |
+
+### Updated Test Counts
+
+| Suite | Count | Status |
+|-------|-------|--------|
+| Benchmarks (analyzer) | 2 new | Added to format_benches group |

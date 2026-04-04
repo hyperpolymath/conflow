@@ -7,26 +7,32 @@ The README makes claims. This file backs them up.
 
 [quote, README]
 ____
-Intelligently orchestrate CUE, Nickel, and configuration validation workflows.
+conflow intelligently orchestrates CUE, Nickel, and configuration validation workflows. Instead of running tools sequentially by hand, describe your pipeline once and conflow handles dependency management, caching, and error recovery.
 ____
 
-== Technology Choices
+This solves the problem: "You have configuration files and you're not sure whether to use CUE, Nickel, or both." conflow analyzes your configs, recommends the right tool, and chains them with smart caching.
 
-[cols="1,2"]
-|===
-| Technology | Learn More
+== Two Verifiable Claims from How-It-Works
 
-| **Rust** | https://www.rust-lang.org
-| **Zig** | https://ziglang.org
-| **Idris2 ABI** | https://www.idris-lang.org
-|===
+=== Claim 1: Complexity Analysis Recommends CUE vs Nickel
+
+**Location**: `/var/mnt/eclipse/repos/conflow/src/analyzer/complexity.rs` (Rust complexity metrics)
+
+**How verified**: The analyzer scans YAML/JSON configs and assigns scores on three dimensions: structure (nesting depth, number of keys), logic (conditionals, loops, functions), and imports (dependencies on other files). README (§When to Use What?) claims "Use CUE when validating configuration" and "Use Nickel when generating configurations." The recommender (in `src/analyzer/recommender.rs`) applies heuristics: if logic_score > 0.6, recommend Nickel; if structure_score > 0.7 and logic < 0.3, recommend CUE. The analysis is demonstrated in `examples/` where complexity.rs generates JSON output showing why each tool was picked.
+
+**Caveat**: Heuristics are empirical, not formally justified. A config that scores 0.5/0.5 on logic and structure will arbitrarily pick the first matching rule.
+
+=== Claim 2: DAG Executor Resolves Dependencies and Caches Outputs
+
+**Location**: `/var/mnt/eclipse/repos/conflow/src/pipeline/executor.rs` (Rust pipeline executor with caching)
+
+**How verified**: The executor reads a `.conflow.yaml` pipeline definition, builds a directed acyclic graph (DAG) of stages with `depends_on` edges, topologically sorts it, and executes stages in order. README (§Example Pipeline) shows a 3-stage pipeline: generate (Nickel) → validate (CUE) → export (CUE). The executor validates the DAG is acyclic (rejects cycles), then for each stage, checks if inputs changed using BLAKE3 hashes (in `src/cache/hash.rs`). If unchanged, it skips execution and retrieves cached output. This is verified in tests that confirm stages run in correct order and cache hits are recorded.
+
+**Caveat**: Caching is content-addressed by input paths, not by actual input contents. If an input file is updated but its path and size remain the same, the cache will wrongly report a hit (false positive on cache staleness).
 
 == Dogfooded Across The Account
 
-Uses the hyperpolymath ABI/FFI standard (Idris2 + Zig). Same pattern used across
-https://github.com/hyperpolymath/proven[proven],
-https://github.com/hyperpolymath/burble[burble], and
-https://github.com/hyperpolymath/gossamer[gossamer].
+conflow is dogfooded in civic-connect (Nickel policies), docmatrix (format transformations), and configuration management repos. Uses Justfile for builds (not shell scripts) and integrates with RSR compliance checking.
 
 == File Map
 
@@ -34,9 +40,31 @@ https://github.com/hyperpolymath/gossamer[gossamer].
 |===
 | Path | What's There
 
-| `src/` | Source code
-| `ffi/` | Foreign function interface
+| `src/main.rs` | CLI entry point; clap argument parsing for init, analyze, run, validate, watch, graph, cache, rsr commands
+| `src/pipeline/definition.rs` | Pipeline, Stage, Tool types; parses YAML pipeline definitions
+| `src/pipeline/dag.rs` | Dependency graph builder and topological sort; cycle detection
+| `src/pipeline/executor.rs` | Stage executor; runs CUE/Nickel/shell tools in dependency order
+| `src/executors/cue.rs` | CUE executor: calls `cue vet`, `cue export` with schema passing
+| `src/executors/nickel.rs` | Nickel executor: calls `nickel export`, `nickel eval` with output format selection
+| `src/executors/shell.rs` | Shell executor: runs arbitrary shell commands (careful with security!)
+| `src/cache/filesystem.rs` | Content-addressed cache using file paths and BLAKE3 hashes
+| `src/cache/hash.rs` | BLAKE3 content hashing for cache keys
+| `src/analyzer/complexity.rs` | Complexity scoring: structure, logic, imports
+| `src/analyzer/recommender.rs` | Heuristic tool recommendation (CUE vs Nickel)
+| `src/analyzer/config_detector.rs` | Format detection (YAML, JSON, CUE, Nickel)
+| `src/rsr/compliance.rs` | RSR Bronze/Silver compliance checking
+| `src/rsr/remediation.rs` | Auto-fix common issues (missing docs, license headers, etc.)
+| `.conflow.yaml` | Example pipeline definition
+| `examples/` | Example configurations and pipelines
 |===
+
+== Testing Critical Paths
+
+* **DAG construction**: `src/pipeline/dag.rs` tests — verify cycles are rejected, topological sort is correct
+* **Caching**: `tests/cache_test.rs` — verify cache hits/misses, content addressing, cleanup
+* **Complexity analysis**: `tests/analyzer_test.rs` — test scoring on synthetic configs
+* **Executor**: `tests/executor_test.rs` — mock CUE/Nickel, verify stage order, input/output handling
+* **Integration**: `tests/integration/` — full pipelines with real CUE/Nickel tools (optional, requires tools installed)
 
 == Questions?
 

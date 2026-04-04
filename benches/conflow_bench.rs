@@ -168,11 +168,78 @@ stages:\n\
     });
 }
 
+// ---------------------------------------------------------------------------
+// Format-specific analyzer benchmarks
+//
+// These complement the payload-size benchmarks above by fixing the payload
+// size and varying the configuration format.  They expose per-format overhead
+// in the detector and complexity analyser without the async I/O noise.
+// ---------------------------------------------------------------------------
+
+/// A Nickel config snippet that exercises the logic/function pattern checks.
+const NICKEL_CONFIG: &str = r#"
+let mkService = fun name port =>
+  { inherit name, inherit port, enabled = true, replicas = 3 }
+in
+{
+  frontend  = mkService "web"  80,
+  backend   = mkService "api"  8080,
+  metrics   = mkService "prom" 9090,
+}
+"#;
+
+/// A CUE schema that exercises constraint and validation pattern detection.
+const CUE_SCHEMA: &str = r#"
+#Service: {
+  name:     string
+  port:     int & >0 & <65536
+  replicas: int & >=1 & <=10
+  enabled:  bool | *true
+}
+
+services: [string]: #Service
+services: {
+  frontend: { name: "web",  port: 80,   replicas: 2 }
+  backend:  { name: "api",  port: 8080, replicas: 3 }
+}
+"#;
+
+fn bench_analyzer_nickel(c: &mut Criterion) {
+    let path = write_bench_file("config.ncl", NICKEL_CONFIG);
+    let analyzer = conflow::analyzer::ConfigAnalyzer::new();
+
+    c.bench_function("analyzer/nickel_mkservice_config", |b| {
+        b.iter(|| {
+            let result = run_sync(analyzer.analyze(black_box(&path)));
+            black_box(result.expect("analyze nickel"));
+        })
+    });
+}
+
+fn bench_analyzer_cue(c: &mut Criterion) {
+    let path = write_bench_file("schema.cue", CUE_SCHEMA);
+    let analyzer = conflow::analyzer::ConfigAnalyzer::new();
+
+    c.bench_function("analyzer/cue_schema_with_constraints", |b| {
+        b.iter(|| {
+            let result = run_sync(analyzer.analyze(black_box(&path)));
+            black_box(result.expect("analyze cue"));
+        })
+    });
+}
+
 criterion_group!(
-    benches,
+    analyzer_benches,
     bench_analyzer_small,
     bench_analyzer_medium,
     bench_analyzer_large,
     bench_pipeline_parse_small,
 );
-criterion_main!(benches);
+
+criterion_group!(
+    format_benches,
+    bench_analyzer_nickel,
+    bench_analyzer_cue,
+);
+
+criterion_main!(analyzer_benches, format_benches);

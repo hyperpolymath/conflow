@@ -1,0 +1,136 @@
+# SPDX-License-Identifier: MIT OR Apache-2.0
+# tlaiser manifest for conflow
+
+[project]
+name = "conflow"
+version = "0.1.0"
+description = "State machines for the conflow configuration validation pipeline orchestrator"
+
+# ── Pipeline stage execution ──────────────────────────────────────────────────
+# Source: src/pipeline/executor.rs, src/pipeline/definition.rs
+# Stages transition: Pending -> (CacheHit | Running) -> (Succeeded | Failed)
+# Skipped is a terminal state when dry_run=true or condition not met.
+
+[[state-machines]]
+name = "StageExecution"
+states = ["Pending", "CacheHit", "Running", "Succeeded", "Failed", "Skipped"]
+initial-state = "Pending"
+description = "Lifecycle of a single pipeline stage during execution. Includes cache lookup, execution, and allow_failure handling."
+
+  [[state-machines.variables]]
+  name = "allow_failure"
+  init = "FALSE"
+  type = "BOOLEAN"
+
+  [[state-machines.variables]]
+  name = "cache_enabled"
+  init = "TRUE"
+  type = "BOOLEAN"
+
+  [[state-machines.transitions]]
+  from = "Pending"
+  to = "Skipped"
+  label = "dry_run_or_condition_false"
+
+  [[state-machines.transitions]]
+  from = "Pending"
+  to = "CacheHit"
+  label = "cache_lookup_hit"
+  guard = "cache_enabled = TRUE"
+
+  [[state-machines.transitions]]
+  from = "Pending"
+  to = "Running"
+  label = "cache_miss_or_disabled"
+
+  [[state-machines.transitions]]
+  from = "CacheHit"
+  to = "Succeeded"
+  label = "cache_result_applied"
+
+  [[state-machines.transitions]]
+  from = "Running"
+  to = "Succeeded"
+  label = "executor_succeeds"
+
+  [[state-machines.transitions]]
+  from = "Running"
+  to = "Failed"
+  label = "executor_fails"
+  guard = "allow_failure = FALSE"
+
+  [[state-machines.transitions]]
+  from = "Running"
+  to = "Succeeded"
+  label = "executor_fails_but_allowed"
+  guard = "allow_failure = TRUE"
+
+# ── Cache invalidation ────────────────────────────────────────────────────────
+# Source: src/pipeline/definition.rs CacheInvalidation enum,
+#         src/cache/filesystem.rs
+# Cache entry: Fresh -> Stale -> Absent (evicted)
+
+[[state-machines]]
+name = "CacheEntry"
+states = ["Absent", "Fresh", "Stale"]
+initial-state = "Absent"
+description = "Cache entry lifecycle for a pipeline stage result. Entries are keyed by content hash or mtime."
+
+  [[state-machines.variables]]
+  name = "invalidation_policy"
+  init = "0"
+  type = "INTEGER"
+
+  [[state-machines.transitions]]
+  from = "Absent"
+  to = "Fresh"
+  label = "store_result"
+
+  [[state-machines.transitions]]
+  from = "Fresh"
+  to = "Stale"
+  label = "content_hash_changed"
+  guard = "invalidation_policy = 0"
+
+  [[state-machines.transitions]]
+  from = "Fresh"
+  to = "Stale"
+  label = "mtime_changed"
+  guard = "invalidation_policy = 1"
+
+  [[state-machines.transitions]]
+  from = "Stale"
+  to = "Fresh"
+  label = "store_new_result"
+
+  [[state-machines.transitions]]
+  from = "Fresh"
+  to = "Absent"
+  label = "cache_clear"
+
+  [[state-machines.transitions]]
+  from = "Stale"
+  to = "Absent"
+  label = "cache_clear"
+
+# ── Safety properties ─────────────────────────────────────────────────────────
+
+[[properties]]
+name = "SucceededStageNeverReruns"
+kind = "safety"
+formula = "[][StageExecution = Succeeded => UNCHANGED StageExecution]_StageExecution"
+
+[[properties]]
+name = "FailedStagePropagates"
+kind = "safety"
+formula = "[](StageExecution = Failed => allow_failure = FALSE)"
+
+[[properties]]
+name = "PipelineEventuallyTerminates"
+kind = "liveness"
+formula = "<>(StageExecution = Succeeded \\/ StageExecution = Failed \\/ StageExecution = Skipped)"
+
+[tlc]
+workers = 4
+max-states = 100000
+symmetry = false

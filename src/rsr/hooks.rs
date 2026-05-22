@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 //! RSR Hooks - Integration points for RSR validator
 //!
 //! Provides hooks that RSR validator can use to trigger conflow operations

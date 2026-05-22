@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 //! RSR Schema Registry
 //!
 //! Provides access to RSR schemas for validation and generation.

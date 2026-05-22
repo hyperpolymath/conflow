@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // pipeline.cue — CUE schema for .conflow.yaml pipeline definitions.
 //
 // This schema validates the structure of conflow pipeline files.

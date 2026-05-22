@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // tests/e2e_test.rs — End-to-end tests for the conflow analyzer and pipeline.
 //
 // These tests exercise the public API against realistic config files written

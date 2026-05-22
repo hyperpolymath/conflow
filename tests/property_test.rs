@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // tests/property_test.rs — Property-style tests for the conflow analyzer.
 //
 // These tests verify two core properties:

@@ -1,4 +1,4 @@
-// SPDX-License-Identifier: PMPL-1.0-or-later
+// SPDX-License-Identifier: MPL-2.0
 // benches/conflow_bench.rs — Criterion benchmarks for the conflow analyzer.
 //
 // Benchmarks cover three payload sizes:

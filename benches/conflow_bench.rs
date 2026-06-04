@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // benches/conflow_bench.rs — Criterion benchmarks for the conflow analyzer.
 //
 // Benchmarks cover three payload sizes:

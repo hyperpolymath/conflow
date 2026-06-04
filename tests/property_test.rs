@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // tests/property_test.rs — Property-style tests for the conflow analyzer.
 //
 // These tests verify two core properties:

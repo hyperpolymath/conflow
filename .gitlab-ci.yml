@@ -10,11 +10,9 @@ stages:
   - build
   - compliance
   - release
-
 variables:
   CARGO_HOME: ${CI_PROJECT_DIR}/.cargo
   RUSTFLAGS: "-D warnings"
-
 # Cache cargo dependencies
 .cargo-cache: &cargo-cache
   cache:
@@ -22,37 +20,33 @@ variables:
     paths:
       - .cargo/
       - target/
-
 # -----------------------------------------------------------------------------
 # Check Stage
 # -----------------------------------------------------------------------------
-
 format:
   stage: check
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - rustup component add rustfmt
     - cargo fmt -- --check
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-
 lint:
   stage: check
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - rustup component add clippy
     - cargo clippy --all-targets --all-features -- -D warnings
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-
 audit:
   stage: check
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - cargo install cargo-audit
     - cargo audit
@@ -60,30 +54,26 @@ audit:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-
 # -----------------------------------------------------------------------------
 # Test Stage
 # -----------------------------------------------------------------------------
-
 test:
   stage: test
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - cargo test --all-features
   coverage: '/^\d+.\d+% coverage/'
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-
 # -----------------------------------------------------------------------------
 # Build Stage
 # -----------------------------------------------------------------------------
-
 build:debug:
   stage: build
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - cargo build --all-features
   artifacts:
@@ -92,11 +82,10 @@ build:debug:
     expire_in: 1 day
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-
 build:release:
   stage: build
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - cargo build --release --all-features
   artifacts:
@@ -106,15 +95,13 @@ build:release:
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
     - if: '$CI_COMMIT_TAG'
-
 # -----------------------------------------------------------------------------
 # Compliance Stage
 # -----------------------------------------------------------------------------
-
 rsr-compliance:
   stage: compliance
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - cargo build --release
     - ./target/release/conflow rsr check --format json > rsr-report.json || true
@@ -128,7 +115,6 @@ rsr-compliance:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-
 spdx-check:
   stage: compliance
   image: alpine:latest
@@ -150,21 +136,18 @@ spdx-check:
   rules:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
-
 # -----------------------------------------------------------------------------
 # Release Stage
 # -----------------------------------------------------------------------------
-
 publish:crates:
   stage: release
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - cargo publish --dry-run
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
   when: manual
-
 release:
   stage: release
   image: registry.gitlab.com/gitlab-org/release-cli:latest
@@ -179,15 +162,13 @@ release:
           url: "${CI_PROJECT_URL}/-/jobs/artifacts/${CI_COMMIT_TAG}/raw/target/release/conflow?job=build:release"
   rules:
     - if: '$CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/'
-
 # -----------------------------------------------------------------------------
 # Documentation
 # -----------------------------------------------------------------------------
-
 pages:
   stage: release
   image: rust:latest
-  <<: *cargo-cache
+  !!merge <<: *cargo-cache
   script:
     - cargo doc --no-deps --all-features
     - mv target/doc public
@@ -197,3 +178,8 @@ pages:
       - public
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH'
+trufflehog:
+  stage: security
+  image: trufflesecurity/trufflehog:latest
+  script:
+    - trufflehog git file://. --only-verified --fail

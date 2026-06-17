@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 // tests/e2e_test.rs — End-to-end tests for the conflow analyzer and pipeline.
 //
 // These tests exercise the public API against realistic config files written

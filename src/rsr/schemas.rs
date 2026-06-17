@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! RSR Schema Registry
 //!
 //! Provides access to RSR schemas for validation and generation.

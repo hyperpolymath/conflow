@@ -1,4 +1,5 @@
 // SPDX-License-Identifier: MPL-2.0
+// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 //! RSR Hooks - Integration points for RSR validator
 //!
 //! Provides hooks that RSR validator can use to trigger conflow operations

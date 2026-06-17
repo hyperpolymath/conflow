@@ -3,13 +3,12 @@ name: ClusterFuzzLite PR fuzzing
 on:
   pull_request:
     branches: [main]
-
 permissions:
   contents: read
-
 jobs:
   PR:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +20,6 @@ jobs:
         with:
           language: rust
           sanitizer: ${{ matrix.sanitizer }}
-
       - name: Run Fuzzers (${{ matrix.sanitizer }})
         id: run
         uses: google/clusterfuzzlite/actions/run_fuzzers@884713a6c30a92e5e8544c39945cd7cb630abcd1 # v1

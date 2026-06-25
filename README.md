@@ -1,29 +1,26 @@
-[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-pink?logo=github)](https://github.com/sponsors/hyperpolymath)
+<!--
+SPDX-License-Identifier: CC-BY-SA-4.0
+SPDX-FileCopyrightText: 2025-2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
+-->
 
-= conflow - Configuration Flow Orchestrator
+[![License: MPL-2.0](https://img.shields.io/badge/License-MPL_2.0--1.0-blue.svg)](https://github.com/hyperpolymath/palimpsest-license)
+[![Palimpsest](https://img.shields.io/badge/Philosophy-Palimpsest-indigo.svg)](https://github.com/hyperpolymath/palimpsest-license)
 
-image:https://img.shields.io/badge/License-MPL--2.0-blue.svg[License: PMPL-1.0,link="https://github.com/hyperpolymath/palimpsest-license"]
-image:https://img.shields.io/badge/Philosophy-Palimpsest-indigo.svg[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-license"]
+Intelligently orchestrate CUE, Nickel, and configuration validation
+workflows.
 
+[![RSR Compliance](https://img.shields.io/badge/RSR-Silver-silver)](https://gitlab.com/hyperpolymath/rhodium-standard-repositories) image:[Rust
+Version](https://img.shields.io/badge/Rust-1.75+-orange)
 
-:toc: left
-:toclevels: 3
-:icons: font
-:source-highlighter: rouge
+# Why conflow?
 
-Intelligently orchestrate CUE, Nickel, and configuration validation workflows.
+**Problem:** You have configuration files and you’re not sure whether to
+use CUE, Nickel, or both.
 
-image:https://img.shields.io/badge/RSR-Silver-silver[RSR Compliance, link=https://gitlab.com/hyperpolymath/rhodium-standard-repositories]
-image:https://img.shields.io/badge/Rust-1.75+-orange[Rust Version]
+**Solution:** conflow analyzes your configs, recommends the right tool,
+and orchestrates the entire pipeline.
 
-== Why conflow?
-
-*Problem:* You have configuration files and you're not sure whether to use CUE, Nickel, or both.
-
-*Solution:* conflow analyzes your configs, recommends the right tool, and orchestrates the entire pipeline.
-
-[source,bash]
-----
+```bash
 # Instead of:
 nickel export config.ncl > temp.json
 cue vet schema.cue temp.json
@@ -32,21 +29,27 @@ rm temp.json
 
 # Just:
 conflow run
-----
+```
 
-== Features
+# Features
 
-* *Intelligent analysis* - Recommends CUE vs Nickel based on complexity
-* *Pipeline orchestration* - Chain tools with dependency management
-* *Smart caching* - Only re-run what changed
-* *Educational* - Learn why certain tools fit certain problems
-* *Type-safe* - Catch errors before deployment
-* *RSR Integration* - Full Rhodium Standard Repository compliance checking
+- **Intelligent analysis** - Recommends CUE vs Nickel based on
+  complexity
 
-== Quick Start
+- **Pipeline orchestration** - Chain tools with dependency management
 
-[source,bash]
-----
+- **Smart caching** - Only re-run what changed
+
+- **Educational** - Learn why certain tools fit certain problems
+
+- **Type-safe** - Catch errors before deployment
+
+- **RSR Integration** - Full Rhodium Standard Repository compliance
+  checking
+
+# Quick Start
+
+```bash
 # Install
 cargo install conflow
 
@@ -58,12 +61,11 @@ conflow analyze config.yaml
 
 # Run pipeline
 conflow run
-----
+```
 
-== Example Pipeline
+# Example Pipeline
 
-[source,yaml]
-----
+```yaml
 # .conflow.yaml
 version: "1"
 name: "k8s-deployment"
@@ -94,98 +96,83 @@ stages:
       from_stage: generate
     depends_on: [validate]
     output: deploy/k8s.yaml
-----
+```
 
-[source,bash]
-----
+```bash
 $ conflow run
 ✓ generate (0.08s)
 ✓ validate (0.05s)
 ✓ export (0.03s)
 
 Pipeline completed in 0.16s
-----
+```
 
-== When to Use What?
+# When to Use What?
 
-=== Use CUE when:
+## Use CUE when:
 
-* ✅ Validating configuration
-* ✅ Expressing constraints
-* ✅ Merging configurations
-* ✅ Simple transformations
+- ✅ Validating configuration
 
-=== Use Nickel when:
+- ✅ Expressing constraints
 
-* ✅ Generating configurations
-* ✅ Complex logic needed
-* ✅ Functions and abstraction
-* ✅ DRY configuration
+- ✅ Merging configurations
 
-=== Use Both when:
+- ✅ Simple transformations
 
-* ✅ Nickel generates → CUE validates
-* ✅ Complex generation + strict validation
+## Use Nickel when:
 
-== Commands
+- ✅ Generating configurations
 
-[cols="1,2"]
-|===
-|Command |Description
+- ✅ Complex logic needed
 
-|`conflow init [--template <name>]`
-|Initialize project
+- ✅ Functions and abstraction
 
-|`conflow analyze <files>`
-|Analyze config files
+- ✅ DRY configuration
 
-|`conflow run [--stage <name>]`
-|Execute pipeline
+## Use Both when:
 
-|`conflow watch`
-|Watch mode
+- ✅ Nickel generates → CUE validates
 
-|`conflow validate`
-|Validate pipeline
+- ✅ Complex generation + strict validation
 
-|`conflow graph [--format <fmt>]`
-|Show pipeline graph
+# Commands
 
-|`conflow cache stats`
-|Cache statistics
+| Command                                  | Description           |
+|------------------------------------------|-----------------------|
+| `conflow` `init` `[--template` `<name>]` | Initialize project    |
+| `conflow` `analyze` `<files>`            | Analyze config files  |
+| `conflow` `run` `[--stage` `<name>]`     | Execute pipeline      |
+| `conflow` `watch`                        | Watch mode            |
+| `conflow` `validate`                     | Validate pipeline     |
+| `conflow` `graph` `[--format` `<fmt>]`   | Show pipeline graph   |
+| `conflow` `cache` `stats`                | Cache statistics      |
+| `conflow` `cache` `clear`                | Clear cache           |
+| `conflow` `rsr` `check`                  | Check RSR compliance  |
+| `conflow` `rsr` `requirements`           | List RSR requirements |
 
-|`conflow cache clear`
-|Clear cache
+# Templates
 
-|`conflow rsr check`
-|Check RSR compliance
-
-|`conflow rsr requirements`
-|List RSR requirements
-|===
-
-== Templates
-
-[source,bash]
-----
+```bash
 conflow init --template cue-validation     # Simple CUE validation
 conflow init --template nickel-generation  # Nickel config generation
 conflow init --template full-pipeline      # Generate → validate → export
 conflow init --template kubernetes         # Kubernetes manifests
 conflow init --template multi-env          # Multi-environment configs
-----
+```
 
-== RSR Compliance
+# RSR Compliance
 
 conflow includes full RSR (Rhodium Standard Repository) integration:
 
-* *Compliance checking* - Validate against RSR requirements
-* *Auto-remediation* - Automatically fix common issues
-* *Badge generation* - Generate compliance badges for CI
-* *Diff reports* - Track compliance changes over time
+- **Compliance checking** - Validate against RSR requirements
 
-[source,bash]
-----
+- **Auto-remediation** - Automatically fix common issues
+
+- **Badge generation** - Generate compliance badges for CI
+
+- **Diff reports** - Track compliance changes over time
+
+```bash
 # Check compliance
 conflow rsr check
 
@@ -194,12 +181,11 @@ conflow rsr check --fix
 
 # Generate badge
 conflow rsr check --badge badge.svg
-----
+```
 
-== Development
+# Development
 
-[source,bash]
-----
+```bash
 # Using Nix (recommended)
 nix develop
 
@@ -208,50 +194,71 @@ just build      # Build
 just test       # Run tests
 just check      # Run all checks
 just install    # Install locally
-----
+```
 
-== Documentation
+# Documentation
 
-* link:CLAUDE.md[CLAUDE.md] - AI assistant guidance
-* link:CONTRIBUTING.md[CONTRIBUTING.md] - Contribution guidelines
-* link:SECURITY.md[SECURITY.md] - Security policy
-* link:GOVERNANCE.md[GOVERNANCE.md] - Project governance
-* link:CODE_OF_CONDUCT.md[CODE_OF_CONDUCT.md] - Code of conduct
+- <a href="CLAUDE.md" class="md">CLAUDE</a> - AI assistant guidance
 
-== RSR Standards
+- <a href="CONTRIBUTING.md" class="md">CONTRIBUTING</a> - Contribution
+  guidelines
 
-This project follows link:https://gitlab.com/hyperpolymath/rhodium-standard-repositories[Rhodium Standard Repository] guidelines:
+- <a href="SECURITY.md" class="md">SECURITY</a> - Security policy
 
-* ✅ Memory-safe language (Rust)
-* ✅ Offline-first design
-* ✅ Reproducible builds (Nix)
-* ✅ Comprehensive documentation
-* ✅ SPDX license headers
-* ✅ Security policy
-* ✅ TPCF contribution framework
+- <a href="GOVERNANCE.md" class="md">GOVERNANCE</a> - Project governance
 
-== License
+- <a href="CODE_OF_CONDUCT.md" class="md">CODE_OF_CONDUCT</a> - Code of
+  conduct
+
+# RSR Standards
+
+This project follows [Rhodium Standard
+Repository](https://gitlab.com/hyperpolymath/rhodium-standard-repositories)
+guidelines:
+
+- ✅ Memory-safe language (Rust)
+
+- ✅ Offline-first design
+
+- ✅ Reproducible builds (Nix)
+
+- ✅ Comprehensive documentation
+
+- ✅ SPDX license headers
+
+- ✅ Security policy
+
+- ✅ TPCF contribution framework
+
+# License
 
 This project is dual-licensed under:
 
-* Palimpsest-MPL-1.0 License
-* Apache License, Version 2.0
+- MPL-2.0-1.0 License
 
-See link:LICENSE.txt[LICENSE.txt] for details.
+- Apache License, Version 2.0
 
-== Contributing
+See <a href="LICENSE.txt" class="txt">LICENSE</a> for details.
 
-Contributions are welcome! Please read our link:CONTRIBUTING.md[Contributing Guide] first.
+# Contributing
 
-== Links
+Contributions are welcome! Please read our [Contributing
+Guide](CONTRIBUTING.md) first.
 
-* *Repository:* https://gitlab.com/hyperpolymath/conflow
-* *Issues:* https://gitlab.com/hyperpolymath/conflow/-/issues
-* *CUE:* https://cuelang.org
-* *Nickel:* https://nickel-lang.org
-* *RSR:* https://gitlab.com/hyperpolymath/rhodium-standard-repositories
+# Links
 
+- **Repository:** <https://gitlab.com/hyperpolymath/conflow>
 
-== Architecture
+- **Issues:** <https://gitlab.com/hyperpolymath/conflow/-/issues>
 
-See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.
+- **CUE:** <https://cuelang.org>
+
+- **Nickel:** <https://nickel-lang.org>
+
+- **RSR:**
+  <https://gitlab.com/hyperpolymath/rhodium-standard-repositories>
+
+# Architecture
+
+See <a href="TOPOLOGY.md" class="md">TOPOLOGY</a> for a visual
+architecture map and completion dashboard.

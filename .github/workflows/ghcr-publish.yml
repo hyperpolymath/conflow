@@ -1,4 +1,5 @@
 # SPDX-License-Identifier: MPL-2.0
+# This workflow is managed by gh actions-lock.
 name: Publish to GHCR
 permissions:
   contents: read
@@ -20,7 +21,7 @@ jobs:
       attestations: write   # write the build-provenance attestation (the "claim")
     steps:
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+        uses: actions/checkout@v4.1.1
       - name: Install nerdctl and containerd
         run: |
           sudo apt-get update
@@ -59,7 +60,7 @@ jobs:
       #   gh attest verify oci://ghcr.io/${{ github.repository }}:<tag> \
       #     --repo ${{ github.repository }}
       - name: Attest container provenance
-        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        uses: actions/attest-build-provenance@v2.4.0
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}

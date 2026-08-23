@@ -46,7 +46,7 @@ Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
 
                         ┌─────────────────────────────────────────┐
                         │          REPO INFRASTRUCTURE            │
-                        │  Justfile / Nix     .machine_readable/  │
+                        │  Justfile / Guix     .machine_readable/  │
                         │  ClusterFuzzLite    RSR Silver Tier     │
                         └─────────────────────────────────────────┘
 ```
@@ -68,7 +68,7 @@ RSR INTEGRATION
   Badge Generation                  ██████████ 100%    SVG templates stable
 
 REPO INFRASTRUCTURE
-  Justfile / Nix                    ██████████ 100%    Reproducible build env
+  Justfile / Guix                    ██████████ 100%    Reproducible build env
   .machine_readable/                ██████████ 100%    STATE.a2ml tracking
   Fuzz Testing                      ████████░░  80%    ClusterFuzzLite active
 

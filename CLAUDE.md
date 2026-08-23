@@ -194,7 +194,7 @@ let result = generator.generate("kubernetes", target_dir, &variables)?;
 
 This project aims for RSR Silver compliance:
 
-- [x] Nix flake for reproducible builds
+- [x] Guix flake for reproducible builds
 - [x] Justfile for task running
 - [x] Dual MIT/Apache-2.0 license
 - [x] Comprehensive documentation
@@ -206,7 +206,7 @@ This project aims for RSR Silver compliance:
 
 ### Common Issues
 
-1. **CUE/Nickel not found**: Ensure they're in PATH or use Nix
+1. **CUE/Nickel not found**: Ensure they're in PATH or use Guix
 2. **Cache issues**: Run `conflow cache clear`
 3. **Pipeline validation errors**: Check `conflow validate`
 

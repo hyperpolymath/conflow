@@ -202,8 +202,8 @@ conflow rsr check --badge badge.svg
 
 [source,bash]
 ----
-# Using Nix (recommended)
-nix develop
+# Using Guix (recommended)
+guix develop
 
 # Using just
 just build      # Build
@@ -226,7 +226,7 @@ This project follows link:https://gitlab.com/hyperpolymath/rhodium-standard-repo
 
 * ✅ Memory-safe language (Rust)
 * ✅ Offline-first design
-* ✅ Reproducible builds (Nix)
+* ✅ Reproducible builds (Guix)
 * ✅ Comprehensive documentation
 * ✅ SPDX license headers
 * ✅ Security policy

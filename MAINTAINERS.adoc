@@ -1,48 +1,54 @@
-// SPDX-License-Identifier: CC-BY-SA-4.0
-// Copyright (c) Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
-= Maintainers
-:toc: preamble
+== Maintainers
 
-This document lists the maintainers of this project and their responsibilities.
+This file lists the maintainers of conflow.
 
-== Current Maintainers
+=== Current Maintainers
 
-[cols="2,3,2",options="header"]
-|===
-| Name | Role | Contact
+==== Lead Maintainer
 
-| Jonathan D.A. Jewell
-| Lead Maintainer
-| https://github.com/hyperpolymath[@hyperpolymath]
-|===
+* *Jonathan D.A. Jewell* (@hyperpolymath)
+** GitLab: https://gitlab.com/hyperpolymath
+** Role: Project founder, lead maintainer
+** Areas: All areas
 
-== Responsibilities
+=== Emeritus Maintainers
 
-Maintainers are responsible for:
+_None yet_
 
-* Reviewing and merging pull requests
-* Triaging issues and feature requests
-* Ensuring code quality and security standards
-* Managing releases and versioning
-* Upholding the project's code of conduct
+=== Becoming a Maintainer
 
-== Becoming a Maintainer
+See GOVERNANCE.md for the path to maintainership.
 
-Contributors who demonstrate:
+=== Responsibilities
 
-* Consistent, high-quality contributions
-* Understanding of the project's goals and standards
-* Constructive participation in discussions
-* Commitment to the project's long-term health
+Maintainers are expected to:
 
-May be invited to become maintainers at the discretion of existing maintainers.
+[arabic]
+. *Review Contributions*
+* Respond to MRs within 1 week
+* Provide constructive feedback
+* Merge approved changes
+. *Triage Issues*
+* Label and prioritize issues
+* Close stale/duplicate issues
+* Guide contributors
+. *Security Response*
+* Monitor security reports
+* Coordinate vulnerability fixes
+* Manage disclosure timeline
+. *Community Health*
+* Enforce Code of Conduct
+* Welcome new contributors
+* Foster inclusive environment
+. *Release Management*
+* Prepare release notes
+* Tag releases
+* Update documentation
 
-== Decision Making
+=== Contact
 
-* Routine decisions (bug fixes, minor improvements) can be made by any maintainer
-* Significant changes require discussion and consensus among maintainers
-* Breaking changes or major features should be discussed in issues before implementation
+For maintainer-specific inquiries: maintainers@conflow.dev
 
-== Contact
+'''''
 
-For questions about project governance, open an issue or contact the maintainers listed above.
+_This file is updated when maintainers are added or removed._

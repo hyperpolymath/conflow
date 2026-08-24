@@ -1,162 +1,125 @@
-// SPDX-License-Identifier: CC-BY-SA-4.0
-// SPDX-FileCopyrightText: 2026 Jonathan D.A. Jewell <j.d.a.jewell@open.ac.uk>
-= Governance Model
-:toc: preamble
+== Governance
 
-This document describes the governance model for this repository.
+This document describes the governance model for conflow.
 
-== Overview
+=== Project Structure
 
-This repository follows a **Sole Maintainer Governance Model**:
+==== Roles
 
-* Single maintainer (@hyperpolymath) has full authority over the project
-* All contributions are welcome and reviewed by the maintainer
-* Decisions are made transparently through GitHub issues and discussions
-* The project adheres to the hyperpolymath estate policies where applicable
+===== Maintainers
 
-== Core Principles
+Maintainers have full access to the repository and are responsible for:
 
-[cols="1,2"]
-|===
-| Principle | Description
+* Reviewing and merging contributions
+* Release management
+* Security response
+* Strategic direction
+* Community health
 
-| **Benevolent Dictatorship** | Maintainer has final decision authority but seeks community input
+Current maintainers are listed in MAINTAINERS.md.
 
-| **Meritocracy** | Contributions are judged on technical merit, not contributor identity
+===== Contributors
 
-| **Transparency** | All significant decisions are documented publicly
+Anyone who has had a contribution merged. Contributors are recognized in
+release notes and `+humans.txt+`.
 
-| **Consensus-Seeking** | Maintainer prefers consensus but will decide when necessary
+===== Community Members
 
-| **Open Contribution** | Anyone can contribute via fork and pull request
+Anyone who participates in issues, discussions, or uses the project.
 
-|===
+=== Decision Making
 
-== Roles and Permissions
+==== Consensus-Based
 
-[cols="1,2,2"]
-|===
-| Role | Permissions | Assignment
+We aim for consensus on all significant decisions:
 
-| **Maintainer** | Write access, merge rights, admin | @hyperpolymath
-| **Contributors** | Read access, fork, submit PRs | All GitHub users
-| **Users** | Use the software, report issues | All GitHub users
+[arabic]
+. *Proposal*: Open an issue describing the change
+. *Discussion*: Community feedback period (minimum 1 week for major
+changes)
+. *Decision*: Maintainers evaluate feedback and decide
+. *Documentation*: Decision is documented in the issue
 
-|===
+==== Lazy Consensus
 
-== Decision Making Framework
+For minor changes (typos, small fixes), maintainers may merge without
+extended discussion. If anyone objects, the change can be reverted and
+discussed.
 
-=== Routine Decisions
+==== Voting
 
-* Bug fixes
-* Documentation improvements
-* Minor feature additions
-* Dependency updates
+If consensus cannot be reached:
 
-**Process**: Maintainer reviews and merges PRs that meet quality standards.
+* Each maintainer gets one vote
+* Simple majority wins
+* Ties are broken by the lead maintainer
+* Voting period: 1 week minimum
 
-=== Significant Changes
+=== Becoming a Maintainer
 
-* New major features
-* API changes
-* Architecture modifications
-* Breaking changes
+==== Path to Maintainership
 
-**Process**:
-. Open issue describing the change
-. Discuss with community (minimum 72 hours)
-. Maintainer makes final decision
-. Document rationale in issue/PR
+[arabic]
+. Sustained, high-quality contributions over 6+ months
+. Demonstrated understanding of project goals
+. Positive community interactions
+. Nomination by existing maintainer
+. Approval by majority of maintainers
 
-=== Structural Decisions
+==== Maintainer Responsibilities
 
-* Repository purpose/renaming
-* License changes
-* Ownership transfer
-* Deprecation/archival
+* Review contributions in a timely manner
+* Participate in security response
+* Uphold Code of Conduct
+* Mentor new contributors
+* Participate in governance decisions
 
-**Process**: 
-. Extended discussion (minimum 1 week)
-. Maintainer makes final decision
-. Document in CHANGELOG and governance docs
+==== Stepping Down
 
-== Contribution Lifecycle
+Maintainers may step down at any time by notifying other maintainers.
+Inactive maintainers (6+ months no activity) may be moved to emeritus
+status.
 
-[cols="1,2"]
-|===
-| Stage | Process
+=== Changes to Governance
 
-| **Ideation** | Open issue, discuss feasibility
+This governance model can be amended by:
 
-| **Development** | Fork, implement, test thoroughly
+[arabic]
+. Opening an issue with proposed changes
+. Minimum 2-week discussion period
+. Approval by 2/3 of maintainers
 
-| **Review** | Submit PR, maintainer reviews within 7 days
+=== Conflict Resolution
 
-| **Merge** | Maintainer merges or requests changes
+==== Technical Disputes
 
-| **Release** | Maintainer publishes according to project conventions
+[arabic]
+. Discuss in issue/MR
+. Seek input from additional maintainers
+. If unresolved, maintainer vote
 
-|===
+==== Code of Conduct Violations
 
-== Conflict Resolution
+See CODE_OF_CONDUCT.md for enforcement procedures.
 
-In case of disagreements:
+==== Governance Disputes
 
-. Discuss in the relevant GitHub issue or PR
-. Provide technical justification for positions
-. Maintainer mediates and makes final decision
-. Decision is documented and can be revisited later
+Escalate to full maintainer group for resolution.
 
-== Project Policies
+=== RSR Alignment
 
-This repository adheres to hyperpolymath estate-wide policies:
+This governance model aligns with RSR principles:
 
-* **License**: MPL-2.0 for code, CC-BY-SA-4.0 for prose (per standards/LICENCE-POLICY.adoc)
-* **Code of Conduct**: Follows hyperpolymath CODE_OF_CONDUCT.md
-* **Security**: Follows hyperpolymath SECURITY.md
-* **Contributing**: Follows hyperpolymath CONTRIBUTING.adoc conventions
+* *Emotional Safety*: No-blame culture, safe to make mistakes
+* *Community Over Ego*: Consensus-based decisions
+* *Transparency*: All decisions documented publicly
+* *Accountability*: Clear roles and responsibilities
 
-== Repository-Specific Conventions
+=== Contact
 
-[cols="1,2"]
-|===
-| Convention | Description
+* Governance questions: governance@conflow.dev
+* General inquiries: maintainers@conflow.dev
 
-| **Signing** | All commits must be signed (SSH or GPG)
+'''''
 
-| **SPDX Headers** | All source files must have SPDX license identifiers
-
-| **Contractiles** | Mustfile, Trustfile, Intendfile, Adjustfile in root
-
-| **Machine Readable** | META.a2ml in .machine_readable/6a2/
-
-| **CI/CD** | GitHub Actions workflows in .github/workflows/
-
-|===
-
-== Governance Evolution
-
-As the project grows, this governance model may evolve:
-
-* **Adding Co-Maintainers**: When contribution volume warrants it
-* **Forming a Team**: For complex multi-maintainer projects
-* **Adopting TPCF**: For large, multi-repository projects (see rhodium-standard-repositories)
-
-Changes to this document require the same process as Significant Changes above.
-
-== See Also
-
-* link:MAINTAINERS.adoc[Maintainers]
-* link:CODE_OF_CONDUCT.md[Code of Conduct]
-* link:CONTRIBUTING.adoc[Contributing Guide]
-* link:https://github.com/hyperpolymath/standards/blob/main/LICENCE-POLICY.adoc[Estate License Policy]
-* link:https://github.com/hyperpolymath/standards[rhodium-standard-repositories (TPCF)]
-
-== Changelog
-
-[cols="1,1,1"]
-|===
-| Date | Change | By
-
-| 2026-06-07 | Initial governance model established | @hyperpolymath
-|===
+_Effective Date: 2025-01-01_ _Last Updated: 2025-01-01_

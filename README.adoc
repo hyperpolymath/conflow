@@ -215,7 +215,7 @@ just install    # Install locally
 == Documentation
 
 * link:CLAUDE.md[CLAUDE.md] - AI assistant guidance
-* link:CONTRIBUTING.md[CONTRIBUTING.md] - Contribution guidelines
+* link:.github/CONTRIBUTING.md[CONTRIBUTING.md] - Contribution guidelines
 * link:SECURITY.md[SECURITY.md] - Security policy
 * link:GOVERNANCE.md[GOVERNANCE.md] - Project governance
 * link:CODE_OF_CONDUCT.md[CODE_OF_CONDUCT.md] - Code of conduct
@@ -243,7 +243,7 @@ See link:LICENSE.txt[LICENSE.txt] for details.
 
 == Contributing
 
-Contributions are welcome! Please read our link:CONTRIBUTING.md[Contributing Guide] first.
+Contributions are welcome! Please read our link:.github/CONTRIBUTING.md[Contributing Guide] first.
 
 == Links
 
